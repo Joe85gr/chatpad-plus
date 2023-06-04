@@ -7,7 +7,7 @@ export interface Chat {
   description: string;
   totalTokens: number;
   createdAt: Date;
-  systemMessage: string;
+  systemMessage?: string;
 }
 
 export interface Message {
