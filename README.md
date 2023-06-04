@@ -1,7 +1,6 @@
 ![Chatpad-Plus AI](./banner.png)
 
 <h1 align="center">Chatpad-Plus AI</h1>
-<h2 align="center">Premium quality UI for ChatGPT</h2>
 
 Based on the amazing [Chatpad](https://github.com/deiucanta/chatpad), Chatpad-Plus takes it one step further and adds functionalities such as:
 - Improved consistency on the personality of the AI responses
