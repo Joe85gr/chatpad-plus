@@ -24,10 +24,13 @@ export async function createStreamChatCompletion(
   apiKey: string,
   messages: ChatCompletionRequestMessage[],
   chatId: string,
-  messageId: string
+  messageId: string,
+  setStreaming: (value: boolean) => void
 ) {
   const settings = await db.settings.get("general");
   const model = settings?.openAiModel ?? config.defaultModel;
+
+  setStreaming(true);
 
   return OpenAIExt.streamClientChatCompletion(
     {
@@ -43,7 +46,9 @@ export async function createStreamChatCompletion(
             setTotalTokens(chatId, content);
           }
         },
-        onDone(stream) {},
+        onDone(stream) {
+          setStreaming(false);
+        },
         onError(error, stream) {
           console.error(error);
         },
