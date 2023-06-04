@@ -69,13 +69,13 @@ export function ChatRoute() {
     }
 
     const systemMessages: string[] = [];
-    if (writingCharacter) systemMessages.push(`You are ${writingCharacter}.`);
-    if (writingTone) systemMessages.push(`Respond in ${writingTone} tone.`);
-    if (writingStyle) systemMessages.push(`Respond in ${writingStyle} style.`);
+    if (writingCharacter) systemMessages.push(`Talk Like ${writingCharacter}.`);
+    if (writingTone) systemMessages.push(`Reply in ${writingTone} tone.`);
+    if (writingStyle) systemMessages.push(`Reply in ${writingStyle} style.`);
     if (writingFormat) systemMessages.push(writingFormat);
     if (systemMessages.length === 0)
       systemMessages.push(
-        "You are ChatGPT, a large language model trained by OpenAI."
+        "You are ChatGPT, a helpful AI."
       );
 
     const systemMessage = systemMessages.join(" ");
