@@ -1,14 +1,4 @@
-import { ReactNode } from "react";
-
-export function ScrollIntoView({ children }: { children: ReactNode }) {
-  return (
-    <div
-      ref={(node) => {
-        if (!node) return;
-        node.scrollIntoView({ behavior: "smooth" });
-      }}
-    >
-      {children}
-    </div>
-  );
-}
+export const ScrollIntoView = (ref:  React.RefObject<HTMLDivElement>) => {
+  if(ref && ref.current)
+  {ref.current.scrollIntoView({ behavior: "smooth" })}
+ }
