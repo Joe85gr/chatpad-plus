@@ -19,7 +19,6 @@ import { Message } from "../db";
 import "../styles/markdown.scss";
 import { CreatePromptModal } from "./CreatePromptModal";
 import { LogoIcon } from "./Logo";
-import { ScrollIntoView } from "./ScrollIntoView";
 
 export function MessageItem({ message }: { message: Message }) {
   const clipboard = useClipboard({ timeout: 500 });
@@ -29,7 +28,6 @@ export function MessageItem({ message }: { message: Message }) {
   }, [message.content]);
 
   return (
-    <ScrollIntoView>
       <Card withBorder>
         <Flex gap="sm">
           {message.role === "user" && (
@@ -90,14 +88,8 @@ export function MessageItem({ message }: { message: Message }) {
                 </Tooltip>
               )}
             </CopyButton>
-            {/* <Tooltip label={`${wordCount} words`} position="left">
-              <ActionIcon>
-                <IconInfoCircle opacity={0.5} size={20} />
-              </ActionIcon>
-            </Tooltip> */}
           </Box>
         </Flex>
       </Card>
-    </ScrollIntoView>
   );
 }
