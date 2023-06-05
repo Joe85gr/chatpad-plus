@@ -19,6 +19,7 @@ jobs:
         with:
           node-version: 19
           cache: 'npm'
+      - run: npm i
       - run: npm ci
       - run: npm run build
 
