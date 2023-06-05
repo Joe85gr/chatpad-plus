@@ -2,6 +2,9 @@ name: ci_cd
 on:
   push:
 
+permissions:
+  contents: write
+
 jobs:
 
   build:
