@@ -37,7 +37,7 @@ jobs:
           context: ./
           file: ./Dockerfile
           push: true
-          tags: rainingdreamschatpad-plus:${{ steps.semvers.outputs.version }}
+          tags: rainingdreams/chatpad-plus:${{ steps.versioning.outputs.version }}
 
       - name: Image digest
         run: echo ${{ steps.docker_push.outputs.digest }}
