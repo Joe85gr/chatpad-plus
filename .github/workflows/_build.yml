@@ -31,7 +31,10 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
       - name: Test
-        run: echo "rainingdreams/chatpad-plus:${{ steps.versioning.outputs.patch }}"
+        run: |
+          echo "rainingdreams/chatpad-plus:${{ steps.versioning.outputs.version }}"
+          echo "rainingdreams/chatpad-plus:${{ steps.versioning.outputs.version_tag }}"
+          echo "rainingdreams/chatpad-plus:${{ steps.versioning.outputs.previous_version }}"
 
       # - name: Build and push
       #   if: ${{ github.ref_name == github.event.repository.default_branch }}
