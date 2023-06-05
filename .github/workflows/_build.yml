@@ -34,7 +34,7 @@ jobs:
       - name: Login to DockerHub
         uses: docker/login-action@v2
         with:
-          username: rainingdreams
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
       - name: Build and push
@@ -45,7 +45,7 @@ jobs:
           context: ./
           file: ./Dockerfile
           push: true
-          tags: rainingdreams/chatpad-plus:${{ steps.versioning.outputs.version }}
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/chatpad-plus:${{ steps.versioning.outputs.version }}
 
       - name: Image digest
         run: echo ${{ steps.docker_push.outputs.digest }}
