@@ -68,6 +68,12 @@ jobs:
             echo "docker_tags=${{ secrets.DOCKER_HUB_USERNAME }}/chatpad-plus:${{ steps.tag.outputs.tag }}" >> $GITHUB_OUTPUT
           fi
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
       - name: Push
         uses: docker/build-push-action@v4
         with:
