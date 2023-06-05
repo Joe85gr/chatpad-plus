@@ -37,9 +37,8 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
-      - name: Build and push
-        # if: ${{ github.ref_name == github.event.repository.default_branch }}
-        id: docker_push
+      - name: Push prerelase
+        id: docker_push_prerelease
         uses: docker/build-push-action@v2
         with:
           context: ./
@@ -47,5 +46,14 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/chatpad-plus:${{ steps.versioning.outputs.version }}
 
-      - name: Image digest
-        run: echo ${{ steps.docker_push.outputs.digest }}
+      - name: Push release
+        if: ${{ github.ref_name == github.event.repository.default_branch }}
+        id: docker_push
+        uses: docker/build-push-action@v2
+        with:
+          context: ./
+          file: ./Dockerfile
+          push: true
+          tags: |
+            ${{ secrets.DOCKER_HUB_USERNAME }}/chatpad-plus:${{ steps.versioning.outputs.version_tag }}
+            ${{ secrets.DOCKER_HUB_USERNAME }}/chatpad-plus:latest
