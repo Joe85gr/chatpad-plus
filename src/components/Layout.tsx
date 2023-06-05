@@ -37,7 +37,7 @@ import { useChatId } from "../hooks/useChatId";
 import { Chats } from "./Chats";
 import { CreatePromptModal } from "./CreatePromptModal";
 import { DatabaseModal } from "./DatabaseModal";
-import { LogoText } from "./Logo";
+import { Logo, LogoText } from "./Logo";
 import { Prompts } from "./Prompts";
 import { SettingsModal } from "./SettingsModal";
 import { config } from "../utils/config";
@@ -90,9 +90,9 @@ export function Layout() {
               <Link
                 to="/"
                 className="app-region-no-drag"
-                style={{ marginTop: 10, padding: 4 }}
+                style={{ padding: 4 }}
               >
-                <LogoText
+                <Logo
                   style={{
                     height: 22,
                     color: "#27B882",

@@ -34,7 +34,7 @@ export function IndexRoute() {
             <Logo style={{ maxWidth: 240 }} />
           </Text>
           <Text mt={4} size="xl">
-            Not just another ChatGPT user-interface!
+            An enhanced version of the already amazing Chatpad!
           </Text>
           <SimpleGrid
             mt={50}
