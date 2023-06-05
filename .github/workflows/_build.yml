@@ -31,22 +31,24 @@ jobs:
       #     minor_pattern: "feat"
       #     version_format: "v${major}.${minor}.${patch}-prerelease${increment}"
 
-      - name: Determine release version
-        id: release_version
+      - name: Set Tag
+        id: tag
         run: |
           if ${{ github.ref_name == github.event.repository.default_branch }}
           then
+            echo "refspec=${{ github.sha }}" >> $GITHUB_OUTPUT
             echo "main branch"
           else
-            echo "some other branch"
+            echo "tag=${{ steps.versioning.outputs.version_tag }}" >> $GITHUB_OUTPUT
           fi
 
-
-      - name: Login to DockerHub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      - name: Test
+        run: echo "${{ steps.tag.outputs.tag }}"
+      # - name: Login to DockerHub
+      #   uses: docker/login-action@v2
+      #   with:
+      #     username: ${{ secrets.DOCKER_HUB_USERNAME }}
+      #     password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
       # - name: Push prerelase
       #   id: docker_push_prerelease
