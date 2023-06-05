@@ -57,6 +57,20 @@ jobs:
           draft: false
           prerelease: ${{ github.ref_name != github.event.repository.default_branch }}
 
+      - id: ref
+        shell: bash
+        run: |
+          echo "refspec=${{ github.sha }}" >> $GITHUB_OUTPUT
+
+      - name: Release
+        uses: ncipollo/release-action@v1
+        with:
+          generateReleaseNotes: true
+          allowUpdates: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ steps.versioning.outputs.version_tag }}
+          commit: ${{ steps.ref.outputs.refspec }}
+
       - name: Push release
         if: ${{ github.ref_name == github.event.repository.default_branch }}
         id: docker_push
