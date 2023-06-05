@@ -3,9 +3,6 @@ name: _deploy
 on:
   workflow_call:
 
-env:
-  DOCKER_HUB_USERNAME: rainingdreams
-
 jobs:
 
   build-and-push:
@@ -29,7 +26,7 @@ jobs:
       - name: Login to DockerHub
         uses: docker/login-action@v2
         with:
-          username: $DOCKER_HUB_USERNAME
+          username: rainingdreams
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
       - name: Build and push
@@ -40,7 +37,7 @@ jobs:
           context: ./
           file: ./Dockerfile
           push: true
-          tags: $DOCKER_HUB_USERNAME/chatpad-plus:${{ steps.semvers.outputs.version }}
+          tags: rainingdreamschatpad-plus:${{ steps.semvers.outputs.version }}
 
       - name: Image digest
         run: echo ${{ steps.docker_push.outputs.digest }}
