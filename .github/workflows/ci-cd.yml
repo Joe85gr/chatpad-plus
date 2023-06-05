@@ -2,8 +2,16 @@ name: ci_cd
 on:
   push:
 
+permissions:
+  contents: write
+
 jobs:
 
   build:
     uses: ./.github/workflows/_build.yml
+    secrets: inherit
+
+  push:
+    needs: build
+    uses: ./.github/workflows/_push.yml
     secrets: inherit
