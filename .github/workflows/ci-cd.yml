@@ -1,0 +1,9 @@
+name: ci_cd
+on:
+  push:
+
+jobs:
+
+  build:
+    uses: ./.github/workflows/_build.yml
+    secrets: inherit
