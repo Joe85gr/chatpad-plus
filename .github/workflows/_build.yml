@@ -25,7 +25,6 @@ jobs:
 
       - name: add dummy data
         run: 
-          mkdir dist
           cd dist
           echo "some data" >> test.txt
 
