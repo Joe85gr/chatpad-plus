@@ -36,10 +36,9 @@ jobs:
         run: |
           if ${{ github.ref_name == github.event.repository.default_branch }}
           then
-            echo "refspec=${{ github.sha }}" >> $GITHUB_OUTPUT
-            echo "main branch"
-          else
             echo "tag=${{ steps.versioning.outputs.version_tag }}" >> $GITHUB_OUTPUT
+          else
+            echo "tag=${{ steps.versioning.outputs.version }}" >> $GITHUB_OUTPUT
           fi
 
       - name: Test
