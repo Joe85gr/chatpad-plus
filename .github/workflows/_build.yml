@@ -46,6 +46,17 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/chatpad-plus:${{ steps.versioning.outputs.version }}
 
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.versioning.outputs.version_tag }}
+          release_name: Release ${{ steps.versioning.outputs.version_tag }}
+          draft: false
+          prerelease: ${{ github.ref_name != github.event.repository.default_branch }}
+
       - name: Push release
         if: ${{ github.ref_name == github.event.repository.default_branch }}
         id: docker_push
