@@ -1,11 +1,11 @@
-name: _deploy
+name: _build
 
 on:
   workflow_call:
 
 jobs:
 
-  build-and-push:
+  build:
     runs-on: ubuntu-latest
 
     steps:
