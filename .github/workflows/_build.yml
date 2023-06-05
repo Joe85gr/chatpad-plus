@@ -14,19 +14,14 @@ jobs:
         with:
           fetch-depth: 0
 
-      # - name: Build App
-      #   uses: actions/setup-node@v3
-      #   with:
-      #     node-version: 19
-      # - run: |
-      #     npm i
-      #     npm ci
-      #     npm run build
-
-      - name: add dummy data
-        run: 
-          cd dist
-          echo "some data" >> test.txt
+      - name: Build App
+        uses: actions/setup-node@v3
+        with:
+          node-version: 19
+      - run: |
+          npm i
+          npm ci
+          npm run build
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
