@@ -14,61 +14,72 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Build App
-        uses: actions/setup-node@v3
+      # - name: Build App
+      #   uses: actions/setup-node@v3
+      #   with:
+      #     node-version: 19
+      # - run: |
+      #     npm i
+      #     npm ci
+      #     npm run build
+
+      - name: add dummy data
+        run: 
+          mkdir dist
+          cd dist
+          echo "some data" >> test.txt
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
         with:
-          node-version: 19
-      - run: |
-          npm i
-          npm ci
-          npm run build
+          name: dist
+          path: ./dist
 
-      - name: Semantic versioning
-        id: versioning
-        uses: paulhatch/semantic-version@v5.0.2
-        with:
-          tag_prefix: "v"
-          major_pattern: "breaking" 
-          minor_pattern: "feat"
-          version_format: "v${major}.${minor}.${patch}-prerelease${increment}"
+      # - name: Semantic versioning
+      #   id: versioning
+      #   uses: paulhatch/semantic-version@v5.0.2
+      #   with:
+      #     tag_prefix: "v"
+      #     major_pattern: "breaking" 
+      #     minor_pattern: "feat"
+      #     version_format: "v${major}.${minor}.${patch}-prerelease${increment}"
 
-      - name: Set Tag
-        id: tag
-        run: |
-          if ${{ github.ref_name == github.event.repository.default_branch }}
-          then
-            echo "tag=${{ steps.versioning.outputs.version_tag }}" >> $GITHUB_OUTPUT
-          else
-            echo "tag=${{ steps.versioning.outputs.version }}" >> $GITHUB_OUTPUT
-          fi
+      # - name: Set Tag
+      #   id: tag
+      #   run: |
+      #     if ${{ github.ref_name == github.event.repository.default_branch }}
+      #     then
+      #       echo "tag=${{ steps.versioning.outputs.version_tag }}" >> $GITHUB_OUTPUT
+      #     else
+      #       echo "tag=${{ steps.versioning.outputs.version }}" >> $GITHUB_OUTPUT
+      #     fi
 
-      - name: Test
-        run: echo "${{ steps.tag.outputs.tag }}"
+      # - name: Test
+      #   run: echo "${{ steps.tag.outputs.tag }}"
 
-      - name: Login to DockerHub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      # - name: Login to DockerHub
+      #   uses: docker/login-action@v2
+      #   with:
+      #     username: ${{ secrets.DOCKER_HUB_USERNAME }}
+      #     password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
-      - id: ref
-        shell: bash
-        run: echo "refspec=${{ github.sha }}" >> $GITHUB_OUTPUT
+      # - id: ref
+      #   shell: bash
+      #   run: echo "refspec=${{ github.sha }}" >> $GITHUB_OUTPUT
 
-      - name: Release
-        uses: ncipollo/release-action@v1
-        with:
-          generateReleaseNotes: true
-          allowUpdates: true
-          token: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ steps.versioning.outputs.version_tag }}
-          commit: ${{ steps.ref.outputs.refspec }}
+      # - name: Release
+      #   uses: ncipollo/release-action@v1
+      #   with:
+      #     generateReleaseNotes: true
+      #     allowUpdates: true
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+      #     tag: ${{ steps.tag.outputs.tag }}
+      #     commit: ${{ steps.ref.outputs.refspec }}
 
-      - name: Push
-        id: docker_push_prerelease
-        uses: docker/build-push-action@v2
-        with:
-          context: ./
-          file: ./Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/chatpad-plus:${{ steps.tag.outputs.tag }}
+      # - name: Push
+      #   uses: docker/build-push-action@v2
+      #   with:
+      #     context: ./
+      #     file: ./Dockerfile
+      #     push: true
+      #     tags: ${{ secrets.DOCKER_HUB_USERNAME }}/chatpad-plus:${{ steps.tag.outputs.tag }}
