@@ -19,11 +19,10 @@ jobs:
         id: versioning
         uses: paulhatch/semantic-version@v5.0.2
         with:
-          branch: main
           tag_prefix: "v"
           major_pattern: "breaking" 
           minor_pattern: "feat"
-          format: "v${major}.${minor}.${patch}-prerelease${increment}"
+          version_format: "v${major}.${minor}.${patch}-prerelease${increment}"
 
       - name: Login to DockerHub
         uses: docker/login-action@v2
