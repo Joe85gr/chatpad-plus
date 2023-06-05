@@ -22,14 +22,14 @@ jobs:
       # - run: npm ci
       # - run: npm run build
 
-      # - name: Semantic versioning
-      #   id: versioning
-      #   uses: paulhatch/semantic-version@v5.0.2
-      #   with:
-      #     tag_prefix: "v"
-      #     major_pattern: "breaking" 
-      #     minor_pattern: "feat"
-      #     version_format: "v${major}.${minor}.${patch}-prerelease${increment}"
+      - name: Semantic versioning
+        id: versioning
+        uses: paulhatch/semantic-version@v5.0.2
+        with:
+          tag_prefix: "v"
+          major_pattern: "breaking" 
+          minor_pattern: "feat"
+          version_format: "v${major}.${minor}.${patch}-prerelease${increment}"
 
       - name: Set Tag
         id: tag
