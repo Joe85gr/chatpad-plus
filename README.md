@@ -3,11 +3,12 @@
 <h1 align="center">Chatpad-Plus AI</h1>
 
 Based on the amazing [Chatpad](https://github.com/deiucanta/chatpad), Chatpad-Plus takes it one step further and adds functionalities such as:
-- Added install.sh file for easier install :)
 - Improved consistency on the personality of the AI responses
 - Improved markdown support with code highlighting depending on the code language
 - 'Stop' button for stopping the request if the reply is not relevant
 - 'Regenerate response' button for generating a different response for the last reply
+- Themes support (still work in progress!)
+- Added install.sh file for easier local install
 - New 'bro talk' mode, for the lulz :D
 
 ---
