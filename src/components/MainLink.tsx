@@ -1,4 +1,4 @@
-import { Group, MantineColor, Text, ThemeIcon, UnstyledButton } from "@mantine/core";
+import { Group, Text, ThemeIcon, UnstyledButton } from "@mantine/core";
 import { useLiveQuery } from "dexie-react-hooks";
 import { config } from "../utils/config";
 import { Chat, db } from "../db";

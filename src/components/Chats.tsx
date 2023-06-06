@@ -9,8 +9,6 @@ import { DeleteChatModal } from "./DeleteChatModal";
 import { EditChatModal } from "./EditChatModal";
 import { MainLink } from "./MainLink";
 
-
-
 export function Chats({ search }: { search: string }) {
   const chatId = useChatId();
   const chats = useLiveQuery(() =>
