@@ -4,8 +4,10 @@ interface Config {
     defaultAuth: 'none' | 'bearer-token' | 'api-key';
     defaultBase: string;
     defaultVersion: string;
+    defaultTheme: string;
     defaultKey: string;
     availableModels: AvailableModel[];
+    themes: string[];
     writingCharacters: WritingCharacter[];
     writingTones: string[];
     writingStyles: string[];
