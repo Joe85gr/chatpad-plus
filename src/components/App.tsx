@@ -1,6 +1,7 @@
 import {
   ColorScheme,
   ColorSchemeProvider,
+  DefaultMantineColor,
   MantineProvider,
 } from "@mantine/core";
 import { useHotkeys, useLocalStorage } from "@mantine/hooks";
@@ -13,6 +14,7 @@ import {
 import { ChatRoute } from "../routes/ChatRoute";
 import { IndexRoute } from "../routes/IndexRoute";
 import { Layout } from "./Layout";
+import { config } from "../utils/config";
 
 const history = createHashHistory();
 const location = new ReactLocation({ history });
@@ -23,6 +25,12 @@ export function App() {
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
     key: "mantine-color-scheme",
     defaultValue: prefersDark ? "dark" : "light",
+    getInitialValueInEffect: true,
+  });
+
+  const [theme, setTheme] = useLocalStorage<DefaultMantineColor>({ 
+    key: "mantine-theme",
+    defaultValue: config.defaultTheme,
     getInitialValueInEffect: true,
   });
 
@@ -49,7 +57,7 @@ export function App() {
           withCSSVariables
           theme={{
             colorScheme,
-            primaryColor: "teal",
+            primaryColor: theme,
             globalStyles: (theme) => ({
               body: {
                 backgroundColor:

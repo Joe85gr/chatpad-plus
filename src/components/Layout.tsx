@@ -95,7 +95,7 @@ export function Layout() {
                 <Logo
                   style={{
                     height: 22,
-                    color: "#27B882",
+                    color: theme.colorScheme === "dark" ? "white" : "black",
                     display: "block",
                   }}
                 />

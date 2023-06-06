@@ -5,12 +5,11 @@ import { Chat, db } from "../db";
 
 interface MainLinkProps {
   icon: React.ReactNode;
-  color: string;
   label: string;
   chat: Chat;
 }
 
-export function MainLink({ icon, color, label, chat }: MainLinkProps) {
+export function MainLink({ icon, label, chat }: MainLinkProps) {
   const firstMessage = useLiveQuery(async () => {
     return (await db.messages.orderBy("createdAt").toArray()).filter(
       (m) => m.chatId === chat.id
@@ -29,7 +28,7 @@ export function MainLink({ icon, color, label, chat }: MainLinkProps) {
       })}
     >
       <Group>
-        <ThemeIcon color={color} variant="light">
+        <ThemeIcon variant="light">
           {icon}
         </ThemeIcon>
         <Text

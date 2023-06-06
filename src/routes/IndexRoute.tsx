@@ -9,7 +9,6 @@ import {
   ThemeIcon,
 } from "@mantine/core";
 import {
-  IconCloudDownload,
   IconCurrencyDollar,
   IconKey,
   IconLock,

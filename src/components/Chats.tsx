@@ -14,6 +14,7 @@ export function Chats({ search }: { search: string }) {
   const chats = useLiveQuery(() =>
     db.chats.orderBy("createdAt").reverse().toArray()
   );
+
   const filteredChats = useMemo(
     () =>
       (chats ?? []).filter((chat) => {
@@ -29,20 +30,19 @@ export function Chats({ search }: { search: string }) {
         <Flex
           key={chat.id}
           className={chatId === chat.id ? "active" : undefined}
-          sx={(theme) => ({
+          sx={(mantineTheme) => ({
             marginTop: 1,
             "&:hover, &.active": {
               backgroundColor:
-                theme.colorScheme === "dark"
-                  ? theme.colors.dark[6]
-                  : theme.colors.gray[1],
+                mantineTheme.colorScheme === "dark"
+                  ? mantineTheme.colors.dark[6]
+                  : mantineTheme.colors.gray[1],
             },
           })}
         >
           <Link to={`/chats/${chat.id}`} style={{ flex: 1 }}>
             <MainLink
               icon={<IconMessages size="1rem" />}
-              color="teal"
               chat={chat}
               label={chat.description}
             />

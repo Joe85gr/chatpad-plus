@@ -5,6 +5,15 @@
   "defaultBase": "",
   "defaultVersion": "",
   "defaultKey": "",
+  "defaultTheme": "teal",
+  "themes": [
+    "teal",
+    "grape",
+    "blue",
+    "dark",
+    "pink",
+    "violet"
+  ],
   "availableModels": [
     {
       "value": "gpt-3.5-turbo",

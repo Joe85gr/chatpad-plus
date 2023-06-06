@@ -10,20 +10,32 @@ import {
   Select,
   Stack,
   Text,
+  DefaultMantineColor,
 } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import { useDisclosure, useLocalStorage } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { useLiveQuery } from "dexie-react-hooks";
 import { cloneElement, ReactElement, useEffect, useState } from "react";
 import { db } from "../db";
 import { config } from "../utils/config";
 import { checkOpenAIKey } from "../utils/openai";
+import { ToPascalCase } from "../utils/stringHelpers";
 
 export function SettingsModal({ children }: { children: ReactElement }) {
   const [opened, { open, close }] = useDisclosure(false);
   const [submitting, setSubmitting] = useState(false);
 
   const [value, setValue] = useState("");
+  const availableThemes: string[] = [];
+  for (const availableTheme of config.themes) {
+    availableThemes.push(ToPascalCase(availableTheme));
+  }
+
+  const [theme, setTheme] = useLocalStorage<DefaultMantineColor>({ 
+    key: "mantine-theme",
+    defaultValue: "teal",
+    getInitialValueInEffect: true,
+  });
   const [model, setModel] = useState(config.defaultModel);
   const [type, setType] = useState(config.defaultType);
   const [auth, setAuth] = useState(config.defaultAuth);
@@ -333,6 +345,25 @@ export function SettingsModal({ children }: { children: ReactElement }) {
                 Save
               </Button>
             </Flex>
+            <Select
+              mt="md"
+              label="Theme"
+              value={ToPascalCase(theme)}
+              onChange={async (value: DefaultMantineColor) => {
+                setSubmitting(true);
+                setTheme(value.toLowerCase())
+
+                notifications.show({
+                  title: "Saved",
+                  message: "Theme has been saved.",
+                });
+
+                setSubmitting(false);
+                
+              }}
+              withinPortal
+              data={availableThemes}
+            />
           </form>
         </Stack>
       </Modal>
