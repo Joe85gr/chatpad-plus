@@ -3,6 +3,7 @@ import {
   Button,
   Center,
   Container,
+  DefaultMantineColor,
   Group,
   SimpleGrid,
   Text,
@@ -19,18 +20,24 @@ import { Logo } from "../components/Logo";
 import { SettingsModal } from "../components/SettingsModal";
 import { db } from "../db";
 import { config } from "../utils/config";
+import { useLocalStorage } from "@mantine/hooks";
 
 export function IndexRoute() {
   const settings = useLiveQuery(() => db.settings.get("general"));
   const { openAiApiKey } = settings ?? {};
+  const [userTheme, setUserThemeTheme] = useLocalStorage<DefaultMantineColor>({ 
+    key: "mantine-theme",
+    defaultValue: config.defaultTheme,
+    getInitialValueInEffect: true,
+  });
 
   return (
     <>
       <Center py="xl" sx={{ height: "100%" }}>
         <Container size="sm">
           <Badge mb="lg">GPT-4 Ready</Badge>
-          <Text>
-            <Logo style={{ maxWidth: 240 }} />
+          <Text color={userTheme}>
+            <Logo style={{ maxWidth: 240 }}  />
           </Text>
           <Text mt={4} size="xl">
             An enhanced version of the already amazing Chatpad!
@@ -94,3 +101,7 @@ const features = [
       "Crafted with love and care to provide the best experience possible.",
   },
 ];
+function forceUpdate() {
+  throw new Error("Function not implemented.");
+}
+

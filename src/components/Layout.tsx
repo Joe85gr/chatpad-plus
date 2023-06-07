@@ -56,6 +56,8 @@ export function Layout() {
   const navigate = useNavigate();
   const router = useRouter();
 
+  const userTheme = localStorage.getItem("mantine-theme") ?? config.defaultTheme;
+
   const [search, setSearch] = useState("");
   const chatId = useChatId();
   const chat = useLiveQuery(async () => {
@@ -95,7 +97,7 @@ export function Layout() {
                 <Logo
                   style={{
                     height: 22,
-                    color: theme.colorScheme === "dark" ? "white" : "black",
+                    color: config.colors[userTheme.replace(/"/g, "")],
                     display: "block",
                   }}
                 />
