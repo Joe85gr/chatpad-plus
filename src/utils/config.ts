@@ -1,3 +1,5 @@
+import { Dictionary } from "lodash";
+
 interface Config {
     defaultModel: SelectItem["value"];
     defaultType: 'openai' | 'custom';
@@ -9,6 +11,7 @@ interface Config {
     availableModels: SelectItem[];
     availableThemes: SelectItem[];
     writingCharacters: SelectItem[];
+    colors: Dictionary<string>;
     writingTones: string[];
     writingStyles: string[];
     writingFormats: SelectItem[];

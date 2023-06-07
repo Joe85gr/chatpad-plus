@@ -28,7 +28,7 @@ export function SettingsModal({ children }: { children: ReactElement }) {
 
   const [theme, setTheme] = useLocalStorage<DefaultMantineColor>({ 
     key: "mantine-theme",
-    defaultValue: "teal",
+    defaultValue: config.defaultTheme,
     getInitialValueInEffect: true,
   });
   const [model, setModel] = useState(config.defaultModel);
@@ -40,6 +40,10 @@ export function SettingsModal({ children }: { children: ReactElement }) {
   const settings = useLiveQuery(async () => {
     return db.settings.where({ id: "general" }).first();
   });
+
+  useEffect(() => {
+    window.dispatchEvent(new Event("theme-changed"));
+  }, [theme]);
 
   useEffect(() => {
     if (settings?.openAiApiKey) {

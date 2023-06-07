@@ -21,9 +21,11 @@ import "../styles/markdown.scss";
 import { CreatePromptModal } from "./CreatePromptModal";
 import { LogoIcon } from "./Logo";
 import { vscode } from "./MarkdownStyles";
+import { config } from "../utils/config";
 
 export function MessageItem({ message }: { message: Message }) {
   const clipboard = useClipboard({ timeout: 500 });
+  const userTheme = localStorage.getItem("mantine-theme") ?? config.defaultTheme;
   const wordCount = useMemo(() => {
     var matches = message.content.match(/[\w\d\’\'-\(\)]+/gi);
     return matches ? matches.length : 0;
@@ -37,11 +39,11 @@ export function MessageItem({ message }: { message: Message }) {
       <Card withBorder>
         <Flex gap="sm">
           {message.role === "user" && (
-            <ThemeIcon color="gray" size="lg">
+            <ThemeIcon style={{  background: config.colors[userTheme.replace(/"/g, "")],  }} size="lg">
               <IconUser size={20} />
             </ThemeIcon>
           )}
-          {message.role === "assistant" && <LogoIcon style={{ height: 32 }} />}
+          {message.role === "assistant" && <LogoIcon style={{ height: 32, color: config.colors[userTheme.replace(/"/g, "")],  }} />}
           <Box sx={{ flex: 1, width: 0 }} className="markdown">
             <ReactMarkdown
               children={message.content}

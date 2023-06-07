@@ -20,10 +20,6 @@
       "label": "Blue"
     },
     {
-      "value": "dark",
-      "label": "Dark"
-    },
-    {
       "value": "pink",
       "label": "Pink"
     },
@@ -32,6 +28,13 @@
       "label": "Violet"
     }
   ],
+  "colors": {
+     "teal": "#069268" ,
+     "grape": "#9B36B5",
+     "blue": "#1870C2",
+     "pink": "#C1255B",
+     "violet": "#6741D9"
+  },
   "availableModels": [
     {
       "value": "gpt-3.5-turbo",
