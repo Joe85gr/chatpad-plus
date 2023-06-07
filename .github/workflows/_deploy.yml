@@ -25,4 +25,3 @@ jobs:
             accountId: ${{ secrets.CF_ID }}
             projectName: chatpad-plus
             directory: ./dist
-            branch: ${{ github.event.repository.default_branch }}
