@@ -25,6 +25,4 @@ jobs:
             accountId: ${{ secrets.CF_ID }}
             projectName: chatpad-plus
             directory: ./dist
-            # Optional: Switch what branch you are publishing to.
-            # By default this will be the branch which triggered this workflow
-            # branch: main
+            branch: ${{ github.event.repository.default_branch }}
