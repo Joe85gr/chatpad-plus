@@ -6,13 +6,31 @@
   "defaultVersion": "",
   "defaultKey": "",
   "defaultTheme": "teal",
-  "themes": [
-    "teal",
-    "grape",
-    "blue",
-    "dark",
-    "pink",
-    "violet"
+  "availableThemes": [
+    {
+      "value": "teal",
+      "label": "Teal"
+    },
+    {
+      "value": "grape",
+      "label": "Grape"
+    },
+    {
+      "value": "blue",
+      "label": "Blue"
+    },
+    {
+      "value": "dark",
+      "label": "Dark"
+    },
+    {
+      "value": "pink",
+      "label": "Pink"
+    },
+    {
+      "value": "violet",
+      "label": "Violet"
+    }
   ],
   "availableModels": [
     {

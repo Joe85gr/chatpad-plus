@@ -28,7 +28,7 @@ export function App() {
     getInitialValueInEffect: true,
   });
 
-  const [theme, setTheme] = useLocalStorage<DefaultMantineColor>({ 
+  const [userTheme, setUserTheme] = useLocalStorage<DefaultMantineColor>({ 
     key: "mantine-theme",
     defaultValue: config.defaultTheme,
     getInitialValueInEffect: true,
@@ -57,7 +57,7 @@ export function App() {
           withCSSVariables
           theme={{
             colorScheme,
-            primaryColor: theme,
+            primaryColor: userTheme,
             globalStyles: (theme) => ({
               body: {
                 backgroundColor:

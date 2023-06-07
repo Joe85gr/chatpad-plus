@@ -19,17 +19,12 @@ import { cloneElement, ReactElement, useEffect, useState } from "react";
 import { db } from "../db";
 import { config } from "../utils/config";
 import { checkOpenAIKey } from "../utils/openai";
-import { ToPascalCase } from "../utils/stringHelpers";
 
 export function SettingsModal({ children }: { children: ReactElement }) {
   const [opened, { open, close }] = useDisclosure(false);
   const [submitting, setSubmitting] = useState(false);
 
   const [value, setValue] = useState("");
-  const availableThemes: string[] = [];
-  for (const availableTheme of config.themes) {
-    availableThemes.push(ToPascalCase(availableTheme));
-  }
 
   const [theme, setTheme] = useLocalStorage<DefaultMantineColor>({ 
     key: "mantine-theme",
@@ -348,7 +343,7 @@ export function SettingsModal({ children }: { children: ReactElement }) {
             <Select
               mt="md"
               label="Theme"
-              value={ToPascalCase(theme)}
+              value={theme}
               onChange={async (value: DefaultMantineColor) => {
                 setSubmitting(true);
                 setTheme(value.toLowerCase())
@@ -362,7 +357,7 @@ export function SettingsModal({ children }: { children: ReactElement }) {
                 
               }}
               withinPortal
-              data={availableThemes}
+              data={config.availableThemes}
             />
           </form>
         </Stack>

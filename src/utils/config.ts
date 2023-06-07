@@ -1,17 +1,17 @@
 interface Config {
-    defaultModel: AvailableModel["value"];
+    defaultModel: SelectItem["value"];
     defaultType: 'openai' | 'custom';
     defaultAuth: 'none' | 'bearer-token' | 'api-key';
     defaultBase: string;
     defaultVersion: string;
     defaultTheme: string;
     defaultKey: string;
-    availableModels: AvailableModel[];
-    themes: string[];
-    writingCharacters: WritingCharacter[];
+    availableModels: SelectItem[];
+    availableThemes: SelectItem[];
+    writingCharacters: SelectItem[];
     writingTones: string[];
     writingStyles: string[];
-    writingFormats: WritingFormat[];
+    writingFormats: SelectItem[];
     showDownloadLink: boolean;
     allowDarkModeToggle: boolean;
     allowSettingsModal: boolean;
@@ -21,17 +21,7 @@ interface Config {
     showFirstMessageDescription: boolean;
 }
 
-interface AvailableModel {
-    value: string;
-    label: string;
-}
-  
-interface WritingCharacter {
-    label: string;
-    value: string;
-}
-  
-interface WritingFormat {
+interface SelectItem {
     value: string;
     label: string;
 }
