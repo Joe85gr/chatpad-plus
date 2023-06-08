@@ -72,7 +72,7 @@ export function DeleteMessageModal( { message }: { message: Message } ) {
           </Stack>
         </form>
       </Modal>
-      <Tooltip label="Delete Prompt">
+      <Tooltip label="Delete Prompt" position="left">
         <ActionIcon color="red" onClick={open}>
           <IconX />
         </ActionIcon>
