@@ -110,6 +110,7 @@ export function ChatRoute() {
       setSubmitting(true);
 
       if(!regenerateMessage) {
+
         await db.messages.add({
           id: nanoid(),
           chatId,
@@ -145,7 +146,6 @@ export function ChatRoute() {
         content: await getSystemMessage(chatId),
       });
 
-      console.log("Request messages: ", requestMessages);
       const stream = await createStreamChatCompletion(
         apiKey,
         requestMessages,
@@ -267,8 +267,8 @@ export function ChatRoute() {
     <>
       <Container pt="xl" pb={140}>
         <Stack spacing="xs">
-          {messages?.map((message) => (
-            <MessageItem key={message.id} message={message} />
+          {messages?.map((message, index) => (
+            <MessageItem key={message.id} message={message} isLastUserMessage={index == messages.length - 2}/>
           ))}
           <div ref={messagesEndRef} />
         </Stack>
