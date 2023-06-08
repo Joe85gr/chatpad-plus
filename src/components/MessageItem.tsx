@@ -22,14 +22,20 @@ import { CreatePromptModal } from "./CreatePromptModal";
 import { LogoIcon } from "./Logo";
 import { vscode } from "./MarkdownStyles";
 import { config } from "../utils/config";
+import { DeleteMessageModal } from "./DeleteMessageModal";
 
-export function MessageItem({ message }: { message: Message }) {
+export interface MessageItemProps {
+  message: Message;
+  isLastUserMessage: boolean;
+}
+
+export function MessageItem(item: MessageItemProps) {
   const clipboard = useClipboard({ timeout: 500 });
   const userTheme = localStorage.getItem("mantine-theme") ?? config.defaultTheme;
   const wordCount = useMemo(() => {
-    var matches = message.content.match(/[\w\d\’\'-\(\)]+/gi);
+    var matches = item.message.content.match(/[\w\d\’\'-\(\)]+/gi);
     return matches ? matches.length : 0;
-  }, [message.content]);
+  }, [item.message.content]);
 
   const customStyle = {
     padding: "20px",
@@ -38,15 +44,15 @@ export function MessageItem({ message }: { message: Message }) {
   return (
       <Card withBorder>
         <Flex gap="sm">
-          {message.role === "user" && (
+          {item.message.role === "user" && (
             <ThemeIcon style={{  background: config.colors[userTheme.replace(/"/g, "")],  }} size="lg">
               <IconUser size={20} />
             </ThemeIcon>
           )}
-          {message.role === "assistant" && <LogoIcon style={{ height: 32, color: config.colors[userTheme.replace(/"/g, "")],  }} />}
+          {item.message.role === "assistant" && <LogoIcon style={{ height: 32, color: config.colors[userTheme.replace(/"/g, "")],  }} />}
           <Box sx={{ flex: 1, width: 0 }} className="markdown">
             <ReactMarkdown
-              children={message.content}
+              children={item.message.content}
               remarkPlugins={[remarkGfm]}
               components={{
                 table: ({ node, ...props }) => (
@@ -120,7 +126,7 @@ export function MessageItem({ message }: { message: Message }) {
                   }
               }}}
             />
-            {message.role === "assistant" && (
+            {item.message.role === "assistant" && (
               <Box>
                 <Text size="sm" color="dimmed">
                   {wordCount} words
@@ -129,8 +135,11 @@ export function MessageItem({ message }: { message: Message }) {
             )}
           </Box>
           <Box>
-            <CreatePromptModal content={message.content} />
-            <CopyButton value={message.content}>
+            { item.message.role === "user" && item.isLastUserMessage && (
+              <DeleteMessageModal message={item.message}/>
+            )}
+            <CreatePromptModal content={item.message.content} />
+            <CopyButton value={item.message.content}>
               {({ copied, copy }) => (
                 <Tooltip label={copied ? "Copied" : "Copy Prompt"} position="left">
                   <ActionIcon onClick={copy}>
