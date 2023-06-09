@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { db, Message } from "../db";
 import { useApiKey } from "../hooks/useApiKey";
 import { useChatId } from "../hooks/useChatId";
+import { encode } from "gpt-token-utils";
 
 export function DeleteMessageModal( { message }: { message: Message } ) {
   const [opened, { open, close }] = useDisclosure(false);
@@ -21,6 +22,15 @@ export function DeleteMessageModal( { message }: { message: Message } ) {
   const chatId = useChatId();
   const navigate = useNavigate();
 
+  const removeMessage = async (message: Message | undefined, isAssistant: boolean) => { 
+      if(!message) return;
+      await db.messages.where({ id: message.id  }).delete();
+      if(isAssistant) { 
+        const tokensToRemove = encode(message.content).length;
+        await db.chats.where("id").equals(message.chatId).modify((chat) => { chat.totalTokens -= tokensToRemove });
+       } 
+    };
+
   return (
     <>
       <Modal opened={opened} onClose={close} title="Delete Prompt" size="md">
@@ -29,15 +39,15 @@ export function DeleteMessageModal( { message }: { message: Message } ) {
             try {
               setSubmitting(true);
               event.preventDefault();
-              await db.messages.where({ id: message.id  }).delete();
+
               const messages = await db.messages.where("chatId").equals(message.chatId).sortBy("createdAt");
 
-              const lastMessage = messages.pop();
-              await db.messages.where({ id: lastMessage?.id  }).delete();
-                
+              await removeMessage(messages.pop(), true);
+              await removeMessage(messages.pop(), false);
+
               if(messages.length === 0) {
-                await db.chats.where("id").equals(message.chatId).modify({ description: "New Chat"});
-              }
+                await db.chats.where("id").equals(message.chatId).modify({ description: "New Chat", totalTokens: 0});
+              } 
               close();
 
               notifications.show({
