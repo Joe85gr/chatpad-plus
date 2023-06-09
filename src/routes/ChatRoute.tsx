@@ -27,6 +27,7 @@ import {
 import { ScrollIntoView } from "../components/ScrollIntoView";
 import { IconPlayerStopFilled, IconRefresh } from "@tabler/icons-react";
 import { ChatCompletionRequestMessage } from "openai";
+import { encode } from "gpt-token-utils";
 
 export function ChatRoute() {
   const chatId = useChatId();
@@ -219,7 +220,9 @@ export function ChatRoute() {
     const lastMessage = messages?.pop();
 
     if(lastMessage) {
+      let lastMessageTokens = encode(lastMessage.content).length;
       await db.messages.where({ id: lastMessage.id }).delete();
+      await db.chats.where({ id: lastMessage.chatId }).modify((chat) => { chat.totalTokens -= lastMessageTokens;});
     }
     
     submit(true);
