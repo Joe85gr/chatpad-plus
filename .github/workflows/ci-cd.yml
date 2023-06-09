@@ -1,6 +1,8 @@
 name: ci_cd
 on:
   push:
+    branches-ignore:    
+      - 'chore/**'
 
 permissions:
   contents: write
