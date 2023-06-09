@@ -1,34 +1,30 @@
+import { Dictionary } from "lodash";
+
 interface Config {
-    defaultModel: AvailableModel["value"];
+    defaultModel: SelectItem["value"];
     defaultType: 'openai' | 'custom';
     defaultAuth: 'none' | 'bearer-token' | 'api-key';
     defaultBase: string;
     defaultVersion: string;
+    defaultTheme: string;
     defaultKey: string;
-    availableModels: AvailableModel[];
-    writingCharacters: WritingCharacter[];
+    availableModels: SelectItem[];
+    availableThemes: SelectItem[];
+    writingCharacters: SelectItem[];
+    colors: Dictionary<string>;
     writingTones: string[];
     writingStyles: string[];
-    writingFormats: WritingFormat[];
+    writingFormats: SelectItem[];
     showDownloadLink: boolean;
     allowDarkModeToggle: boolean;
     allowSettingsModal: boolean;
     allowDatabaseModal: boolean;
     showTwitterLink: boolean;
     showFeedbackLink: boolean;
+    showFirstMessageDescription: boolean;
 }
 
-interface AvailableModel {
-    value: string;
-    label: string;
-}
-  
-interface WritingCharacter {
-    label: string;
-    value: string;
-}
-  
-interface WritingFormat {
+interface SelectItem {
     value: string;
     label: string;
 }

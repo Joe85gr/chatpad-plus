@@ -7,6 +7,7 @@ export interface Chat {
   description: string;
   totalTokens: number;
   createdAt: Date;
+  systemMessage?: string;
 }
 
 export interface Message {
@@ -41,7 +42,7 @@ export class Database extends Dexie {
   settings!: Table<Settings>;
 
   constructor() {
-    super("chatpad");
+    super("chatpad-plus");
     this.version(2).stores({
       chats: "id, createdAt",
       messages: "id, chatId, createdAt",

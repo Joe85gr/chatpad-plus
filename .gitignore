@@ -2,3 +2,5 @@
 /.parcel-cache
 /dist
 notes.txt
+.DS_Store
+yarn.lock

@@ -3,13 +3,13 @@ import {
   Button,
   Center,
   Container,
+  DefaultMantineColor,
   Group,
   SimpleGrid,
   Text,
   ThemeIcon,
 } from "@mantine/core";
 import {
-  IconCloudDownload,
   IconCurrencyDollar,
   IconKey,
   IconLock,
@@ -20,21 +20,27 @@ import { Logo } from "../components/Logo";
 import { SettingsModal } from "../components/SettingsModal";
 import { db } from "../db";
 import { config } from "../utils/config";
+import { useLocalStorage } from "@mantine/hooks";
 
 export function IndexRoute() {
   const settings = useLiveQuery(() => db.settings.get("general"));
   const { openAiApiKey } = settings ?? {};
+  const [userTheme, setUserThemeTheme] = useLocalStorage<DefaultMantineColor>({ 
+    key: "mantine-theme",
+    defaultValue: config.defaultTheme,
+    getInitialValueInEffect: true,
+  });
 
   return (
     <>
       <Center py="xl" sx={{ height: "100%" }}>
         <Container size="sm">
           <Badge mb="lg">GPT-4 Ready</Badge>
-          <Text>
-            <Logo style={{ maxWidth: 240 }} />
+          <Text color={userTheme}>
+            <Logo style={{ maxWidth: 240 }}  />
           </Text>
           <Text mt={4} size="xl">
-            Not just another ChatGPT user-interface!
+            An enhanced version of the already amazing Chatpad!
           </Text>
           <SimpleGrid
             mt={50}
@@ -68,18 +74,6 @@ export function IndexRoute() {
                 </Button>
               </SettingsModal>
             )}
-            {config.showDownloadLink && !window.todesktop && (
-              <Button
-                component="a"
-                href="https://dl.todesktop.com/230313oyppkw40a"
-                // href="https://download.chatpad.ai/"
-                size="md"
-                variant="outline"
-                leftIcon={<IconCloudDownload size={20} />}
-              >
-                Download Desktop App
-              </Button>
-            )}
           </Group>
         </Container>
       </Center>
@@ -107,3 +101,7 @@ const features = [
       "Crafted with love and care to provide the best experience possible.",
   },
 ];
+function forceUpdate() {
+  throw new Error("Function not implemented.");
+}
+

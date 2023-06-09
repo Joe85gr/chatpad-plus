@@ -14,7 +14,7 @@ import {
 import { notifications } from "@mantine/notifications";
 import { useLiveQuery } from "dexie-react-hooks";
 import { nanoid } from "nanoid";
-import { KeyboardEvent, useState, type ChangeEvent } from "react";
+import { KeyboardEvent, useState, type ChangeEvent, useRef, useEffect } from "react";
 import { AiOutlineSend } from "react-icons/ai";
 import { MessageItem } from "../components/MessageItem";
 import { db } from "../db";
@@ -24,6 +24,10 @@ import {
   createChatCompletion,
   createStreamChatCompletion,
 } from "../utils/openai";
+import { ScrollIntoView } from "../components/ScrollIntoView";
+import { IconPlayerStopFilled, IconRefresh } from "@tabler/icons-react";
+import { ChatCompletionRequestMessage } from "openai";
+import { encode } from "gpt-token-utils";
 
 export function ChatRoute() {
   const chatId = useChatId();
@@ -42,6 +46,8 @@ export function ChatRoute() {
   const [content, setContent] = useState("");
   const [contentDraft, setContentDraft] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [streaming, setStreaming] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null); 
 
   const chat = useLiveQuery(async () => {
     if (!chatId) return null;
@@ -52,21 +58,35 @@ export function ChatRoute() {
   const [writingTone, setWritingTone] = useState<string | null>(null);
   const [writingStyle, setWritingStyle] = useState<string | null>(null);
   const [writingFormat, setWritingFormat] = useState<string | null>(null);
+  const [completition, setCompletion] = useState<XMLHttpRequest>();
 
-  const getSystemMessage = () => {
-    const message: string[] = [];
-    if (writingCharacter) message.push(`You are ${writingCharacter}.`);
-    if (writingTone) message.push(`Respond in ${writingTone} tone.`);
-    if (writingStyle) message.push(`Respond in ${writingStyle} style.`);
-    if (writingFormat) message.push(writingFormat);
-    if (message.length === 0)
-      message.push(
-        "You are ChatGPT, a large language model trained by OpenAI."
+  const getSystemMessage = async (chatId: string) => {
+
+    if(chatId) {
+      const existing = await db.chats.get(chatId);
+      if(existing && existing.systemMessage) {
+        return existing.systemMessage;
+      }
+    }
+
+    const systemMessages: string[] = [];
+    if (writingCharacter) systemMessages.push(`Talk Like ${writingCharacter}.`);
+    if (writingTone) systemMessages.push(`Reply in ${writingTone} tone.`);
+    if (writingStyle) systemMessages.push(`Reply in ${writingStyle} style.`);
+    if (writingFormat) systemMessages.push(writingFormat);
+    if (systemMessages.length === 0)
+      systemMessages.push(
+        "You are ChatGPT, a helpful AI."
       );
-    return message.join(" ");
+
+    const systemMessage = systemMessages.join(" ");
+
+    db.chats.update(chatId, { systemMessage: systemMessage });
+    
+    return systemMessage;
   };
 
-  const submit = async () => {
+  const submit = async (regenerateMessage: boolean = false) => {
     if (submitting) return;
 
     if (!chatId) {
@@ -90,14 +110,17 @@ export function ChatRoute() {
     try {
       setSubmitting(true);
 
-      await db.messages.add({
-        id: nanoid(),
-        chatId,
-        content,
-        role: "user",
-        createdAt: new Date(),
-      });
-      setContent("");
+      if(!regenerateMessage) {
+
+        await db.messages.add({
+          id: nanoid(),
+          chatId,
+          content,
+          role: "user",
+          createdAt: new Date(),
+        });
+        setContent("");
+      }
 
       const messageId = nanoid();
       await db.messages.add({
@@ -108,22 +131,31 @@ export function ChatRoute() {
         createdAt: new Date(),
       });
 
-      await createStreamChatCompletion(
+      const requestMessages: ChatCompletionRequestMessage[] = [
+        ...(messages ?? []).map((message) => ({
+          role: message.role,
+          content: message.content,
+        }))
+      ];
+
+      if(!regenerateMessage) {
+        requestMessages.push({ role: "user", content });
+      }
+
+      requestMessages.push({
+        role: "system",
+        content: await getSystemMessage(chatId),
+      });
+
+      const stream = await createStreamChatCompletion(
         apiKey,
-        [
-          {
-            role: "system",
-            content: getSystemMessage(),
-          },
-          ...(messages ?? []).map((message) => ({
-            role: message.role,
-            content: message.content,
-          })),
-          { role: "user", content },
-        ],
+        requestMessages,
         chatId,
-        messageId
+        messageId,
+        setStreaming
       );
+
+      setCompletion(stream);
 
       setSubmitting(false);
 
@@ -131,19 +163,13 @@ export function ChatRoute() {
         const messages = await db.messages
           .where({ chatId })
           .sortBy("createdAt");
+
+        const firstMessageContent = messages[0].content;
+
         const createChatDescription = await createChatCompletion(apiKey, [
           {
-            role: "system",
-            content: getSystemMessage(),
-          },
-          ...(messages ?? []).map((message) => ({
-            role: message.role,
-            content: message.content,
-          })),
-          {
             role: "user",
-            content:
-              "What would be a short and relevant title for this chat ? You must strictly answer with only the title, no other text is allowed.",
+            content: `tl;dr of the following text, max 4 words: "${firstMessageContent}"`
           },
         ]);
         const chatDescription =
@@ -182,6 +208,26 @@ export function ChatRoute() {
     }
   };
 
+  async function stop() {
+    if (completition) {
+      completition.abort();
+      setSubmitting(false);
+    }
+  }
+
+  async function regenerateResponse() {
+    
+    const lastMessage = messages?.pop();
+
+    if(lastMessage) {
+      let lastMessageTokens = encode(lastMessage.content).length;
+      await db.messages.where({ id: lastMessage.id }).delete();
+      await db.chats.where({ id: lastMessage.chatId }).modify((chat) => { chat.totalTokens -= lastMessageTokens;});
+    }
+    
+    submit(true);
+  }
+
   const onUserMsgToggle = (event: KeyboardEvent<HTMLTextAreaElement>) => {
     const { selectionStart, selectionEnd } = event.currentTarget;
     if (
@@ -214,15 +260,20 @@ export function ChatRoute() {
     setUserMsgIndex(0);
   };
 
-  if (!chatId) return null;
+  useEffect(() => {
+    ScrollIntoView(messagesEndRef)
+  }, [messages]);
 
+  if (!chatId) return null;
+  
   return (
     <>
-      <Container pt="xl" pb={100}>
+      <Container pt="xl" pb={140}>
         <Stack spacing="xs">
-          {messages?.map((message) => (
-            <MessageItem key={message.id} message={message} />
+          {messages?.map((message, index) => (
+            <MessageItem key={message.id} message={message} isLastUserMessage={index == messages.length - 2}/>
           ))}
+          <div ref={messagesEndRef} />
         </Stack>
         {submitting && (
           <Card withBorder mt="xs">
@@ -302,43 +353,58 @@ export function ChatRoute() {
               />
             </SimpleGrid>
           )}
-          <Flex gap="sm">
-            <Textarea
-              key={chatId}
-              sx={{ flex: 1 }}
-              placeholder="Your message here..."
-              autosize
-              autoFocus
-              disabled={submitting}
-              minRows={1}
-              maxRows={5}
-              value={content}
-              onChange={onContentChange}
-              onKeyDown={async (event) => {
-                if (event.code === "Enter" && !event.shiftKey) {
-                  event.preventDefault();
-                  submit();
-                  setUserMsgIndex(0);
+          <SimpleGrid cols={1} spacing="xs" verticalSpacing="xs">
+            <Flex
+                mb="xs"
+                justify="center"
+                align="center">
+                {streaming && 
+                <Button onClick={stop} leftIcon={<IconPlayerStopFilled size={20} />}>
+                  Stop
+                </Button>
                 }
-                if (event.code === "ArrowUp") {
-                  onUserMsgToggle(event);
+                {!streaming && messages?.length !== 0 &&
+                <Button onClick={regenerateResponse} leftIcon={<IconRefresh size={20} />}>
+                  Regenerate response 
+                </Button>
                 }
-                if (event.code === "ArrowDown") {
-                  onUserMsgToggle(event);
-                }
-              }}
-            />
-            <MediaQuery largerThan="sm" styles={{ display: "none" }}>
-              <Button
-                h="auto"
-                onClick={() => {
-                  submit();
+            </Flex>
+            <Flex gap="sm">
+              <Textarea
+                key={chatId}
+                sx={{ flex: 1 }}
+                placeholder="Your message here..."
+                autosize
+                autoFocus
+                disabled={submitting}
+                minRows={1}
+                maxRows={5}
+                value={content}
+                onChange={onContentChange}
+                onKeyDown={async (event) => {
+                  if (event.code === "Enter" && !event.shiftKey) {
+                    event.preventDefault();
+                    submit();
+                    setUserMsgIndex(0);
+                  }
+                  if (event.code === "ArrowUp") {
+                    onUserMsgToggle(event);
+                  }
+                  if (event.code === "ArrowDown") {
+                    onUserMsgToggle(event);
+                  }
                 }}
-              >
-                <AiOutlineSend />
-              </Button>
-            </MediaQuery>
-          </Flex>
+              />
+              <MediaQuery largerThan="sm" styles={{ display: "none" }}>
+                <Button h="auto" onClick={() => { submit();  }}>
+                  <AiOutlineSend />
+                </Button>
+              </MediaQuery>
+
+            </Flex>
+
+          </SimpleGrid>
+
         </Container>
       </Box>
     </>

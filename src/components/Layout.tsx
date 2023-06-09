@@ -37,7 +37,7 @@ import { useChatId } from "../hooks/useChatId";
 import { Chats } from "./Chats";
 import { CreatePromptModal } from "./CreatePromptModal";
 import { DatabaseModal } from "./DatabaseModal";
-import { LogoText } from "./Logo";
+import { Logo } from "./Logo";
 import { Prompts } from "./Prompts";
 import { SettingsModal } from "./SettingsModal";
 import { config } from "../utils/config";
@@ -55,6 +55,8 @@ export function Layout() {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const navigate = useNavigate();
   const router = useRouter();
+
+  const userTheme = localStorage.getItem("mantine-theme") ?? config.defaultTheme;
 
   const [search, setSearch] = useState("");
   const chatId = useChatId();
@@ -90,12 +92,12 @@ export function Layout() {
               <Link
                 to="/"
                 className="app-region-no-drag"
-                style={{ marginTop: 10, padding: 4 }}
+                style={{ padding: 4 }}
               >
-                <LogoText
+                <Logo
                   style={{
                     height: 22,
-                    color: "#27B882",
+                    color: config.colors[userTheme.replace(/"/g, "")],
                     display: "block",
                   }}
                 />
@@ -225,7 +227,7 @@ export function Layout() {
               <Tooltip label="Source Code">
                 <ActionIcon
                   component="a"
-                  href="https://github.com/deiucanta/chatpad"
+                  href="https://github.com/Joe85gr/chatpad-plus"
                   target="_blank"
                   sx={{ flex: 1 }}
                   size="xl"
@@ -237,7 +239,7 @@ export function Layout() {
                 <Tooltip label="Follow on Twitter">
                   <ActionIcon
                     component="a"
-                    href="https://twitter.com/deiucanta"
+                    href="https://twitter.com/"
                     target="_blank"
                     sx={{ flex: 1 }}
                     size="xl"
@@ -250,12 +252,12 @@ export function Layout() {
                 <Tooltip label="Give Feedback">
                   <ActionIcon
                     component="a"
-                    href="https://feedback.chatpad.ai"
+                    href="#"
                     onClick={(event) => {
                       if (window.todesktop) {
                         event.preventDefault();
                         window.todesktop.contents.openUrlInBrowser(
-                          "https://feedback.chatpad.ai"
+                          "#"
                         );
                       }
                     }}

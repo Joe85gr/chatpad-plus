@@ -10,8 +10,9 @@ import {
   Select,
   Stack,
   Text,
+  DefaultMantineColor,
 } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import { useDisclosure, useLocalStorage } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { useLiveQuery } from "dexie-react-hooks";
 import { cloneElement, ReactElement, useEffect, useState } from "react";
@@ -24,6 +25,12 @@ export function SettingsModal({ children }: { children: ReactElement }) {
   const [submitting, setSubmitting] = useState(false);
 
   const [value, setValue] = useState("");
+
+  const [theme, setTheme] = useLocalStorage<DefaultMantineColor>({ 
+    key: "mantine-theme",
+    defaultValue: config.defaultTheme,
+    getInitialValueInEffect: true,
+  });
   const [model, setModel] = useState(config.defaultModel);
   const [type, setType] = useState(config.defaultType);
   const [auth, setAuth] = useState(config.defaultAuth);
@@ -33,6 +40,10 @@ export function SettingsModal({ children }: { children: ReactElement }) {
   const settings = useLiveQuery(async () => {
     return db.settings.where({ id: "general" }).first();
   });
+
+  useEffect(() => {
+    window.dispatchEvent(new Event("theme-changed"));
+  }, [theme]);
 
   useEffect(() => {
     if (settings?.openAiApiKey) {
@@ -68,7 +79,6 @@ export function SettingsModal({ children }: { children: ReactElement }) {
                 await checkOpenAIKey(value);
                 await db.settings.where({ id: "general" }).modify((apiKey) => {
                   apiKey.openAiApiKey = value;
-                  console.log(apiKey);
                 });
                 notifications.show({
                   title: "Saved",
@@ -334,6 +344,25 @@ export function SettingsModal({ children }: { children: ReactElement }) {
                 Save
               </Button>
             </Flex>
+            <Select
+              mt="md"
+              label="Theme"
+              value={theme}
+              onChange={async (value: DefaultMantineColor) => {
+                setSubmitting(true);
+                setTheme(value.toLowerCase())
+
+                notifications.show({
+                  title: "Saved",
+                  message: "Theme has been saved.",
+                });
+
+                setSubmitting(false);
+                
+              }}
+              withinPortal
+              data={config.availableThemes}
+            />
           </form>
         </Stack>
       </Modal>
