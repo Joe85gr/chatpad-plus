@@ -83,8 +83,8 @@ export function DeleteMessageModal( { message }: { message: Message } ) {
         </form>
       </Modal>
       <Tooltip label="Delete Prompt" position="left">
-        <ActionIcon color="red" onClick={open}>
-          <IconX />
+        <ActionIcon onClick={open}>
+          <IconX opacity={0.5} size={20}/>
         </ActionIcon>
       </Tooltip>
     </>
