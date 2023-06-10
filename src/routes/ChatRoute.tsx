@@ -174,7 +174,7 @@ export function ChatRoute() {
           },
         ]);
         const chatDescription =
-          createChatDescription.data.choices[0].message?.content;
+          createChatDescription.data.choices[0].message?.content.replace(".", "");
 
         if (createChatDescription.data.usage) {
           await db.chats.where({ id: chatId }).modify((chat) => {

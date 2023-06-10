@@ -41,6 +41,7 @@ import { Logo } from "./Logo";
 import { Prompts } from "./Prompts";
 import { SettingsModal } from "./SettingsModal";
 import { config } from "../utils/config";
+import "../styles/layout.scss"
 
 declare global {
   interface Window {
@@ -284,7 +285,8 @@ export function Layout() {
                 height: "100%",
               }}
             >
-              {`${chat.description} - ${chat.totalTokens ?? 0} tokens ~ $${(
+              <span className="chat-description-title">{ `${chat.description}` }</span>
+              {`${chat.totalTokens ?? 0} tokens ~ $${(
                 ((chat.totalTokens ?? 0) * 0.002) /
                 1000
               ).toFixed(5)}`}

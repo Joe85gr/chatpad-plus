@@ -1,0 +1,9 @@
+.chat-description-title {
+    margin: 5px;
+}
+
+@media only screen and (max-width: 600px) {
+    .chat-description-title  {
+      display: none;
+    }
+  }
