@@ -28,6 +28,7 @@ import { ScrollIntoView } from "../components/ScrollIntoView";
 import { IconPlayerStopFilled, IconRefresh } from "@tabler/icons-react";
 import { ChatCompletionRequestMessage } from "openai";
 import { encode } from "gpt-token-utils";
+import { set } from "lodash";
 
 export function ChatRoute() {
   const chatId = useChatId();
@@ -205,6 +206,7 @@ export function ChatRoute() {
       }
     } finally {
       setSubmitting(false);
+      setStreaming(false);
     }
   };
 
@@ -212,6 +214,7 @@ export function ChatRoute() {
     if (completition) {
       completition.abort();
       setSubmitting(false);
+      setStreaming(false);
     }
   }
 
