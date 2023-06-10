@@ -189,6 +189,9 @@ export function ChatRoute() {
         }
       }
     } catch (error: any) {
+
+      setStreaming(false);
+      
       if (error.toJSON().message === "Network Error") {
         notifications.show({
           title: "Error",
@@ -206,7 +209,6 @@ export function ChatRoute() {
       }
     } finally {
       setSubmitting(false);
-      setStreaming(false);
     }
   };
 
