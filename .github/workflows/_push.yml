@@ -46,7 +46,7 @@ jobs:
 
       - name: Zip Release
         run: |
-          zip ./dist/* ./release/chatpad-plus.${{ steps.tag.outputs.tag }}.zip
+          zip -r ./release/chatpad-plus.${{ steps.tag.outputs.tag }}.zip ./dist/*
       - name: Release
         uses: ncipollo/release-action@v1
         with:
