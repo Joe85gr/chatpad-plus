@@ -6,6 +6,8 @@ import { cloneElement, ReactElement, useEffect, useState } from "react";
 import { Chat, db } from "../db";
 import { useApiKey } from "../hooks/useApiKey";
 import { useChatId } from "../hooks/useChatId";
+import "../i18";
+import { useTranslation } from "react-i18next";
 
 export function DeleteChatModal({
   chat,
@@ -14,6 +16,7 @@ export function DeleteChatModal({
   chat: Chat;
   children: ReactElement;
 }) {
+  const { t, i18n } = useTranslation();
   const [opened, { open, close }] = useDisclosure(false);
   const [submitting, setSubmitting] = useState(false);
 
@@ -29,7 +32,7 @@ export function DeleteChatModal({
   return (
     <>
       {cloneElement(children, { onClick: open })}
-      <Modal opened={opened} onClose={close} title="Delete Chat">
+      <Modal opened={opened} onClose={close} title={t("deleteChatModal.title")}>
         <form
           onSubmit={async (event) => {
             try {
@@ -43,22 +46,21 @@ export function DeleteChatModal({
               close();
 
               notifications.show({
-                title: "Deleted",
-                message: "Chat deleted.",
+                title: t("deleteChatModal.notifications.deleted.title"),
+                message: t("deleteChatModal.notifications.deleted.message"),
               });
             } catch (error: any) {
               if (error.toJSON().message === "Network Error") {
                 notifications.show({
-                  title: "Error",
+                  title: t("misc.notifications.networkError.title"),
                   color: "red",
-                  message: "No internet connection.",
+                  message: t("misc.notifications.networkError.message"),
                 });
               } else {
                 notifications.show({
-                  title: "Error",
+                  title:  t("misc.notifications.error.title"),
                   color: "red",
-                  message:
-                    "Can't remove chat. Please refresh the page and try again.",
+                  message: t("misc.notifications.networkError.message"),
                 });
               }
             } finally {
@@ -67,9 +69,9 @@ export function DeleteChatModal({
           }}
         >
           <Stack>
-            <Text size="sm">Are you sure you want to delete this chat?</Text>
+            <Text size="sm">{t("deleteChatModal.text")}</Text>
             <Button type="submit" color="red" loading={submitting}>
-              Delete
+              {t("misc.deleteButton")}
             </Button>
           </Stack>
         </form>

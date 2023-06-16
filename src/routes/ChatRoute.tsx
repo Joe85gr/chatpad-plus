@@ -28,9 +28,9 @@ import { ScrollIntoView } from "../components/ScrollIntoView";
 import { IconPlayerStopFilled, IconRefresh } from "@tabler/icons-react";
 import { ChatCompletionRequestMessage } from "openai";
 import { encode } from "gpt-token-utils";
-import { set } from "lodash";
 
 export function ChatRoute() {
+
   const chatId = useChatId();
   const apiKey = useLiveQuery(async () => {
     return (await db.settings.where({ id: "general" }).first())?.openAiApiKey;

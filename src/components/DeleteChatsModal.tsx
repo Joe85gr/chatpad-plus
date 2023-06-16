@@ -2,8 +2,11 @@ import { Button, Modal, Stack, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconTrash } from "@tabler/icons-react";
 import { db } from "../db";
+import "../i18";
+import { useTranslation } from "react-i18next";
 
 export function DeleteChatsModal({ onOpen }: { onOpen: () => void }) {
+  const { t, i18n } = useTranslation();
   const [opened, { open, close }] = useDisclosure(false, { onOpen });
 
   return (
@@ -14,17 +17,17 @@ export function DeleteChatsModal({ onOpen }: { onOpen: () => void }) {
         color="red"
         leftIcon={<IconTrash size={20} />}
       >
-        Delete Chats
+        {t("deleteChatsModal.deleteButton")}
       </Button>
       <Modal
         opened={opened}
         onClose={close}
-        title="Delete Chats"
+        title={t("deleteChatsModal.title")}
         size="md"
         withinPortal
       >
         <Stack>
-          <Text size="sm">Are you sure you want to delete your chats?</Text>
+          <Text size="sm">{t("deleteChatsModal.text")}</Text>
           <Button
             onClick={async () => {
               await db.chats.clear();
@@ -34,7 +37,7 @@ export function DeleteChatsModal({ onOpen }: { onOpen: () => void }) {
             }}
             color="red"
           >
-            Delete
+            {t("misc.deleteButton")}
           </Button>
         </Stack>
       </Modal>

@@ -19,6 +19,7 @@ import { cloneElement, ReactElement, useEffect, useState } from "react";
 import { db } from "../db";
 import { config } from "../utils/config";
 import { checkOpenAIKey } from "../utils/openai";
+import { availableLanguages, changeLanguage, getCurrentLanguage } from "../i18";
 
 export function SettingsModal({ children }: { children: ReactElement }) {
   const [opened, { open, close }] = useDisclosure(false);
@@ -36,6 +37,7 @@ export function SettingsModal({ children }: { children: ReactElement }) {
   const [auth, setAuth] = useState(config.defaultAuth);
   const [base, setBase] = useState("");
   const [version, setVersion] = useState("");
+  const [currentLanguage, setCurrentLanguage] = useState(getCurrentLanguage());
 
   const settings = useLiveQuery(async () => {
     return db.settings.where({ id: "general" }).first();
@@ -362,6 +364,26 @@ export function SettingsModal({ children }: { children: ReactElement }) {
               }}
               withinPortal
               data={config.availableThemes}
+            />
+            <Select
+              mt="md"
+              label="Language"
+              value={currentLanguage}
+              onChange={async (value: DefaultMantineColor) => {
+                setSubmitting(true);
+                setCurrentLanguage(value);
+                changeLanguage(value);
+
+                notifications.show({
+                  title: "Saved",
+                  message: "Language has been saved.",
+                });
+
+                setSubmitting(false);
+                
+              }}
+              withinPortal
+              data={availableLanguages}
             />
           </form>
         </Stack>
