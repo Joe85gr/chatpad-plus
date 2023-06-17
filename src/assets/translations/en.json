@@ -1,8 +1,10 @@
 {
     "translation": {
         "misc": {
+            "search": "Search",
             "deleteButton": "Delete",
             "saveButton": "Save",
+            "tokens": "tokens",
             "newChatDescription": "New Chat",
             "notifications": {
                 "neworkError": {

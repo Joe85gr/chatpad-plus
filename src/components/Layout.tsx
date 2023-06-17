@@ -169,7 +169,7 @@ export function Layout() {
             <TextInput
               variant="unstyled"
               radius={0}
-              placeholder="Search"
+              placeholder={t("misc.search")}
               value={search}
               onChange={(event) =>
                 setSearch(event.currentTarget.value.toLowerCase())
@@ -289,7 +289,7 @@ export function Layout() {
               }}
             >
               <span className="chat-description-title">{ `${chat.description}` }</span>
-              {`${chat.totalTokens ?? 0} tokens ~ $${(
+              {`${chat.totalTokens ?? 0} ${t("misc.tokens")} ~ $${(
                 ((chat.totalTokens ?? 0) * 0.002) /
                 1000
               ).toFixed(5)}`}
