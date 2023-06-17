@@ -3,6 +3,7 @@
         "misc": {
             "deleteButton": "Delete",
             "saveButton": "Save",
+            "newChatDescription": "New Chat",
             "notifications": {
                 "neworkError": {
                     "title": "Error",
@@ -45,7 +46,6 @@
             "style": "Style",
             "format": "Format",
             "tldr": "tl;dr of the following text, max 4 words",
-            "newChat": "New Chat",
             "stopButton": "Stop",
             "regenerateButton": "Regenerate response",
             "textAreaPlaceholder": "Your message here...",
@@ -187,12 +187,32 @@
         },
         "editChatModal": {
             "title": "Edit Prompt",
+            "label": "Name",
             "notifications": {
                 "saved": {
                     "title": "Saved",
                     "message": ""
                 }
             }
+        },
+        "editPromptModal": {
+            "title": "Edit Prompt",
+            "titleLabel": "Title",
+            "contentLabel": "Content",
+            "editPromptLabel": "Edit Prompt",
+            "notifications": {
+                "saved": {
+                    "title": "Saved",
+                    "message": "Prompt updated"
+                }
+            }
+        },
+        "chats": {
+            "edit": "Edit",
+            "delete": "Delete"
+        },
+        "prompts": {
+            "tooltipLabel": "New Chat From Prompt"
         }
     }
 }

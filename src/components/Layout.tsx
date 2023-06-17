@@ -42,6 +42,8 @@ import { Prompts } from "./Prompts";
 import { SettingsModal } from "./SettingsModal";
 import { config } from "../utils/config";
 import "../styles/layout.scss"
+import "../i18";
+import { useTranslation } from "react-i18next";
 
 declare global {
   interface Window {
@@ -50,6 +52,7 @@ declare global {
 }
 
 export function Layout() {
+  const { t, i18n } = useTranslation()
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
   const [tab, setTab] = useState<"Chats" | "Prompts">("Chats");
@@ -140,7 +143,7 @@ export function Layout() {
                     const id = nanoid();
                     db.chats.add({
                       id,
-                      description: "New Chat",
+                      description: t("misc.newChatDescription"),
                       totalTokens: 0,
                       createdAt: new Date(),
                     });

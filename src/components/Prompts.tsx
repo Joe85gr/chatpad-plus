@@ -8,6 +8,8 @@ import { db } from "../db";
 import { createChatCompletion } from "../utils/openai";
 import { DeletePromptModal } from "./DeletePromptModal";
 import { EditPromptModal } from "./EditPromptModal";
+import "../i18";
+import { useTranslation } from "react-i18next";
 
 export function Prompts({
   onPlay,
@@ -16,6 +18,7 @@ export function Prompts({
   onPlay: () => void;
   search: string;
 }) {
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const prompts = useLiveQuery(() =>
     db.prompts.orderBy("createdAt").reverse().toArray()
@@ -80,7 +83,7 @@ export function Prompts({
             </Text>
           </Box>
           <Group spacing="none">
-            <Tooltip label="New Chat From Prompt">
+            <Tooltip label={t("prompts.tooltipLabel")}>
               <ActionIcon
                 size="lg"
                 onClick={async () => {
@@ -88,7 +91,7 @@ export function Prompts({
                   const id = nanoid();
                   await db.chats.add({
                     id,
-                    description: "New Chat",
+                    description: t("misc.newChatDescription"),
                     totalTokens: 0,
                     createdAt: new Date(),
                   });
@@ -103,11 +106,6 @@ export function Prompts({
                   onPlay();
 
                   const result = await createChatCompletion(apiKey, [
-                    {
-                      role: "system",
-                      content:
-                        "You are ChatGPT, a large language model trained by OpenAI.",
-                    },
                     { role: "user", content: prompt.content },
                   ]);
 

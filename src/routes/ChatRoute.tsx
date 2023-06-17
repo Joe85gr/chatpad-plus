@@ -162,7 +162,7 @@ export function ChatRoute() {
 
       setSubmitting(false);
 
-      if (chat?.description === "New Chat") {
+      if (chat?.description === t("misc.newChatDescription")) {
         const messages = await db.messages
           .where({ chatId })
           .sortBy("createdAt");
@@ -180,7 +180,7 @@ export function ChatRoute() {
 
         if (createChatDescription.data.usage) {
           await db.chats.where({ id: chatId }).modify((chat) => {
-            chat.description = chatDescription ?? "New Chat";
+            chat.description = chatDescription ?? t("misc.newChatDescription");
             if (chat.totalTokens) {
               chat.totalTokens +=
                 createChatDescription.data.usage!.total_tokens;

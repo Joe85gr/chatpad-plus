@@ -26,7 +26,7 @@ import { useTranslation } from "react-i18next";
 
 
 export function IndexRoute() {
-  const { t, i18n } = useTranslation()
+  const { t, i18n } = useTranslation();
   const settings = useLiveQuery(() => db.settings.get("general"));
   const { openAiApiKey } = settings ?? {};
   const [userTheme, setUserThemeTheme] = useLocalStorage<DefaultMantineColor>({ 

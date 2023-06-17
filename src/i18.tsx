@@ -2,12 +2,10 @@ import i18n from "i18next";
 import {initReactI18next} from "react-i18next";
 import LanguageDetector from 'i18next-browser-languagedetector';
 import en from './assets/translations/en.json';
-import it from './assets/translations/it.json';
 import { SelectItem } from "@mantine/core";
 
 export const availableLanguages: SelectItem[] = [ 
     {label: "English", value: "en"},
-    {label: "Italian", value: "it"},
 ];
 
 i18n
@@ -15,8 +13,7 @@ i18n
     .use(LanguageDetector)
     .init({
         resources : {
-            en,
-            it
+            en
         },
         fallbackLng: "en",
         lng: 'en',

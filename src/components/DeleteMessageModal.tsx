@@ -49,7 +49,7 @@ export function DeleteMessageModal( { message }: { message: Message } ) {
               await removeMessage(messages.pop(), false);
 
               if(messages.length === 0) {
-                await db.chats.where("id").equals(message.chatId).modify({ description: "New Chat", totalTokens: 0});
+                await db.chats.where("id").equals(message.chatId).modify({ description: t("misc.newChatDescription"), totalTokens: 0});
               } 
               close();
 
