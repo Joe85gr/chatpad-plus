@@ -21,8 +21,12 @@ import { SettingsModal } from "../components/SettingsModal";
 import { db } from "../db";
 import { config } from "../utils/config";
 import { useLocalStorage } from "@mantine/hooks";
+import "../i18";
+import { useTranslation } from "react-i18next";
+
 
 export function IndexRoute() {
+  const { t, i18n } = useTranslation();
   const settings = useLiveQuery(() => db.settings.get("general"));
   const { openAiApiKey } = settings ?? {};
   const [userTheme, setUserThemeTheme] = useLocalStorage<DefaultMantineColor>({ 
@@ -31,16 +35,38 @@ export function IndexRoute() {
     getInitialValueInEffect: true,
   });
 
+  const features = [
+    {
+      icon: IconCurrencyDollar,
+      title: t('indexRoute.features.1.title'),
+      description: t('indexRoute.features.1.description'),
+    },
+    {
+      icon: IconLock,
+      title: t('indexRoute.features.2.title'),
+      description: t('indexRoute.features.2.description'),
+    },
+    {
+      icon: IconNorthStar,
+      title: t('indexRoute.features.2.title'),
+      description: t('indexRoute.features.2.description'),
+    },
+  ];
+  function forceUpdate() {
+    throw new Error("Function not implemented.");
+  }
+  
+
   return (
     <>
       <Center py="xl" sx={{ height: "100%" }}>
         <Container size="sm">
-          <Badge mb="lg">GPT-4 Ready</Badge>
+          <Badge mb="lg">{t("indexRoute.badge")}</Badge>
           <Text color={userTheme}>
             <Logo style={{ maxWidth: 240 }}  />
           </Text>
           <Text mt={4} size="xl">
-            An enhanced version of the already amazing Chatpad!
+            {t("indexRoute.descriptionText")}
           </Text>
           <SimpleGrid
             mt={50}
@@ -70,7 +96,7 @@ export function IndexRoute() {
                   variant={openAiApiKey ? "light" : "filled"}
                   leftIcon={<IconKey size={20} />}
                 >
-                  {openAiApiKey ? "Change OpenAI Key" : "Enter OpenAI Key"}
+                  {openAiApiKey ? t("indexRoute.changeKeyButton") : t("indexRoute.enterKeyButton")}
                 </Button>
               </SettingsModal>
             )}
@@ -80,28 +106,3 @@ export function IndexRoute() {
     </>
   );
 }
-
-const features = [
-  {
-    icon: IconCurrencyDollar,
-    title: "Free and open source",
-    description:
-      "This app is provided for free and the source code is available on GitHub.",
-  },
-  {
-    icon: IconLock,
-    title: "Privacy focused",
-    description:
-      "No tracking, no cookies, no bullshit. All your data is stored locally.",
-  },
-  {
-    icon: IconNorthStar,
-    title: "Best experience",
-    description:
-      "Crafted with love and care to provide the best experience possible.",
-  },
-];
-function forceUpdate() {
-  throw new Error("Function not implemented.");
-}
-

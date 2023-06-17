@@ -15,6 +15,7 @@ import { ChatRoute } from "../routes/ChatRoute";
 import { IndexRoute } from "../routes/IndexRoute";
 import { Layout } from "./Layout";
 import { config } from "../utils/config";
+import "../i18"
 
 const history = createHashHistory();
 const location = new ReactLocation({ history });

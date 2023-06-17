@@ -1,6 +1,7 @@
 {
   "include": ["src/**/*"],
   "compilerOptions": {
+    "resolveJsonModule": true,
     "jsx": "react-jsx",
     "esModuleInterop": true,
     "lib": ["es2018", "dom"],

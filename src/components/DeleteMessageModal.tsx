@@ -8,8 +8,11 @@ import { db, Message } from "../db";
 import { useApiKey } from "../hooks/useApiKey";
 import { useChatId } from "../hooks/useChatId";
 import { encode } from "gpt-token-utils";
+import "../i18";
+import { useTranslation } from "react-i18next";
 
 export function DeleteMessageModal( { message }: { message: Message } ) {
+  const { t, i18n } = useTranslation();
   const [opened, { open, close }] = useDisclosure(false);
   const [submitting, setSubmitting] = useState(false);
 
@@ -33,7 +36,7 @@ export function DeleteMessageModal( { message }: { message: Message } ) {
 
   return (
     <>
-      <Modal opened={opened} onClose={close} title="Delete Prompt" size="md">
+      <Modal opened={opened} onClose={close} title={t("deleteMessageModal.title")} size="md">
         <form
           onSubmit={async (event) => {
             try {
@@ -46,27 +49,26 @@ export function DeleteMessageModal( { message }: { message: Message } ) {
               await removeMessage(messages.pop(), false);
 
               if(messages.length === 0) {
-                await db.chats.where("id").equals(message.chatId).modify({ description: "New Chat", totalTokens: 0});
+                await db.chats.where("id").equals(message.chatId).modify({ description: t("misc.newChatDescription"), totalTokens: 0});
               } 
               close();
 
               notifications.show({
-                title: "Deleted",
-                message: "Prompt deleted.",
+                title: t("deleteMessageModal.notifications.deleted.title"),
+                message: t("deleteMessageModal.notifications.deleted.message"),
               });
             } catch (error: any) {
               if (error.toJSON().message === "Network Error") {
                 notifications.show({
-                  title: "Error",
+                  title: t("misc.notifications.networkError.title"),
                   color: "red",
-                  message: "No internet connection.",
+                  message: t("misc.notifications.networkError.message"),
                 });
               } else {
                 notifications.show({
-                  title: "Error",
+                  title: t("misc.notifications.error.title"),
                   color: "red",
-                  message:
-                    "Can't remove chat. Please refresh the page and try again.",
+                  message:t("misc.notifications.error.message"),
                 });
               }
             } finally {
@@ -75,14 +77,14 @@ export function DeleteMessageModal( { message }: { message: Message } ) {
           }}
         >
           <Stack>
-            <Text size="sm">Are you sure you want to delete this prompt?</Text>
+            <Text size="sm">{t("deleteMessageModal.text")}</Text>
             <Button type="submit" color="red" loading={submitting}>
-              Delete
+              {t("misc.deleteButton")}
             </Button>
           </Stack>
         </form>
       </Modal>
-      <Tooltip label="Delete Prompt" position="left">
+      <Tooltip label={t("deleteMessageModal.tooltip")} position="left">
         <ActionIcon onClick={open}>
           <IconX opacity={0.5} size={20}/>
         </ActionIcon>

@@ -8,8 +8,11 @@ import { useChatId } from "../hooks/useChatId";
 import { DeleteChatModal } from "./DeleteChatModal";
 import { EditChatModal } from "./EditChatModal";
 import { MainLink } from "./MainLink";
+import "../i18";
+import { useTranslation } from "react-i18next";
 
 export function Chats({ search }: { search: string }) {
+  const { t, i18n } = useTranslation();
   const chatId = useChatId();
   const chats = useLiveQuery(() =>
     db.chats.orderBy("createdAt").reverse().toArray()
@@ -55,10 +58,10 @@ export function Chats({ search }: { search: string }) {
             </Menu.Target>
             <Menu.Dropdown>
               <EditChatModal chat={chat}>
-                <Menu.Item>Edit</Menu.Item>
+                <Menu.Item>{t("chats.edit")}</Menu.Item>
               </EditChatModal>
               <DeleteChatModal chat={chat}>
-                <Menu.Item>Delete</Menu.Item>
+                <Menu.Item>{t("chats.delete")}</Menu.Item>
               </DeleteChatModal>
             </Menu.Dropdown>
           </Menu>

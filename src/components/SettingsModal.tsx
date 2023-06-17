@@ -19,8 +19,13 @@ import { cloneElement, ReactElement, useEffect, useState } from "react";
 import { db } from "../db";
 import { config } from "../utils/config";
 import { checkOpenAIKey } from "../utils/openai";
+import { availableLanguages, changeLanguage, getCurrentLanguage } from "../i18";
+import "../i18";
+import { useTranslation } from "react-i18next";
 
 export function SettingsModal({ children }: { children: ReactElement }) {
+  const [currentLanguage, setCurrentLanguage] = useState(getCurrentLanguage());
+  const { t, i18n } = useTranslation();
   const [opened, { open, close }] = useDisclosure(false);
   const [submitting, setSubmitting] = useState(false);
 
@@ -69,7 +74,7 @@ export function SettingsModal({ children }: { children: ReactElement }) {
   return (
     <>
       {cloneElement(children, { onClick: open })}
-      <Modal opened={opened} onClose={close} title="Settings" size="lg">
+      <Modal opened={opened} onClose={close} title={t("settingsModal.title")} size="lg">
         <Stack>
           <form
             onSubmit={async (event) => {
@@ -81,21 +86,21 @@ export function SettingsModal({ children }: { children: ReactElement }) {
                   apiKey.openAiApiKey = value;
                 });
                 notifications.show({
-                  title: "Saved",
-                  message: "Your OpenAI Key has been saved.",
+                  title: t("settingsModal.notifications.apiKeySaved.title"),
+                  message: t("settingsModal.notifications.apiKeySaved.message"),
                 });
               } catch (error: any) {
                 if (error.toJSON().message === "Network Error") {
                   notifications.show({
-                    title: "Error",
+                    title: t("misc.notifications.neworkError.title"),
                     color: "red",
-                    message: "No internet connection.",
+                    message: t("misc.notifications.neworkError.message"),
                   });
                 }
                 const message = error.response?.data?.error?.message;
                 if (message) {
                   notifications.show({
-                    title: "Error",
+                    title: t("misc.notifications.error.title"),
                     color: "red",
                     message,
                   });
@@ -107,7 +112,7 @@ export function SettingsModal({ children }: { children: ReactElement }) {
           >
             <Flex gap="xs" align="end">
               <PasswordInput
-                label="OpenAI API Key"
+                label={t("settingsModal.apiKeyLabel")}
                 placeholder="sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
                 sx={{ flex: 1 }}
                 value={value}
@@ -115,7 +120,7 @@ export function SettingsModal({ children }: { children: ReactElement }) {
                 formNoValidate
               />
               <Button type="submit" loading={submitting}>
-                Save
+                {t("misc.saveButton")}
               </Button>
             </Flex>
           </form>
@@ -126,19 +131,18 @@ export function SettingsModal({ children }: { children: ReactElement }) {
                   href="https://platform.openai.com/account/api-keys"
                   target="_blank"
                 >
-                  Get your OpenAI API key
+                  {t("settingsModal.apiKeyText1")}
                 </Anchor>
               </Text>
             </List.Item>
             <List.Item>
               <Text size="sm" color="dimmed">
-                The API Key is stored locally on your browser and never sent
-                anywhere else.
+                {t("settingsModal.apiKeyText2")}
               </Text>
             </List.Item>
           </List>
           <Select
-            label="OpenAI Type"
+            label={t("settingsModal.apiType")}
             value={type}
             onChange={async (value) => {
               setSubmitting(true);
@@ -147,21 +151,21 @@ export function SettingsModal({ children }: { children: ReactElement }) {
                   openAiApiType: value ?? 'openai',
                 });
                 notifications.show({
-                  title: "Saved",
-                  message: "Your OpenAI Type has been saved.",
+                  title: t("settingsModal.notifications.apiTypeSaved.title"),
+                  message: t("settingsModal.notifications.apiTypeSaved.message"),
                 });
               } catch (error: any) {
                 if (error.toJSON().message === "Network Error") {
                   notifications.show({
-                    title: "Error",
+                    title: t("misc.notifications.neworkError.title"),
                     color: "red",
-                    message: "No internet connection.",
+                    message: t("misc.notifications.neworkError.message"),
                   });
                 }
                 const message = error.response?.data?.error?.message;
                 if (message) {
                   notifications.show({
-                    title: "Error",
+                    title: t("misc.notifications.error.title"),
                     color: "red",
                     message,
                   });
@@ -171,10 +175,13 @@ export function SettingsModal({ children }: { children: ReactElement }) {
               }
             }}
             withinPortal
-            data={[{ "value": "openai", "label": "OpenAI"}, { "value": "custom", "label": "Custom (e.g. Azure OpenAI)"}]}
+            data={[
+              { "value": "openai", "label": "OpenAI"},
+              { "value": "custom", "label": "Custom (e.g. Azure OpenAI)"}
+            ]}
           />
           <Select
-            label="OpenAI Model (OpenAI Only)"
+            label={t("settingsModal.apiModelLabel")}
             value={model}
             onChange={async (value) => {
               setSubmitting(true);
@@ -183,21 +190,21 @@ export function SettingsModal({ children }: { children: ReactElement }) {
                   openAiModel: value ?? undefined,
                 });
                 notifications.show({
-                  title: "Saved",
-                  message: "Your OpenAI Model has been saved.",
+                  title: t("settingsModal.notifications.apiModelSaved.title"),
+                  message: t("settingsModal.notifications.apiModelSaved.message"),
                 });
               } catch (error: any) {
                 if (error.toJSON().message === "Network Error") {
                   notifications.show({
-                    title: "Error",
+                    title: t("misc.notifications.neworkError.title"),
                     color: "red",
-                    message: "No internet connection.",
+                    message: t("misc.notifications.neworkError.message"),
                   });
                 }
                 const message = error.response?.data?.error?.message;
                 if (message) {
                   notifications.show({
-                    title: "Error",
+                    title: t("misc.notifications.error.title"),
                     color: "red",
                     message,
                   });
@@ -209,9 +216,8 @@ export function SettingsModal({ children }: { children: ReactElement }) {
             withinPortal
             data={config.availableModels}
           />
-          <Alert color="orange" title="Warning">
-            The displayed cost was not updated yet to reflect the costs for each
-            model. Right now it will always show the cost for GPT-3.5 on OpenAI.
+          <Alert color="orange" title={t("settingsModal.warningTitle")}>
+          {t("settingsModal.warningMessage")}
           </Alert>
           <Select
             label="OpenAI Auth (Custom Only)"
@@ -229,15 +235,15 @@ export function SettingsModal({ children }: { children: ReactElement }) {
               } catch (error: any) {
                 if (error.toJSON().message === "Network Error") {
                   notifications.show({
-                    title: "Error",
+                    title: t("misc.notifications.neworkError.title"),
                     color: "red",
-                    message: "No internet connection.",
+                    message: t("misc.notifications.neworkError.message"),
                   });
                 }
                 const message = error.response?.data?.error?.message;
                 if (message) {
                   notifications.show({
-                    title: "Error",
+                    title: t("misc.notifications.error.title"),
                     color: "red",
                     message,
                   });
@@ -259,21 +265,21 @@ export function SettingsModal({ children }: { children: ReactElement }) {
                   console.log(row);
                 });
                 notifications.show({
-                  title: "Saved",
-                  message: "Your OpenAI Base has been saved.",
+                  title: t("settingsModal.notifications.apiBaseSaved.title"),
+                  message: t("settingsModal.notifications.apiBaseSaved.message"),
                 });
               } catch (error: any) {
                 if (error.toJSON().message === "Network Error") {
                   notifications.show({
-                    title: "Error",
+                    title: t("misc.notifications.neworkError.title"),
                     color: "red",
-                    message: "No internet connection.",
+                    message: t("misc.notifications.neworkError.message"),
                   });
                 }
                 const message = error.response?.data?.error?.message;
                 if (message) {
                   notifications.show({
-                    title: "Error",
+                    title: t("misc.notifications.error.title"),
                     color: "red",
                     message,
                   });
@@ -293,7 +299,7 @@ export function SettingsModal({ children }: { children: ReactElement }) {
                 formNoValidate
               />
               <Button type="submit" loading={submitting}>
-                Save
+              {t("misc.saveButton")}
               </Button>
             </Flex>
           </form>
@@ -307,21 +313,21 @@ export function SettingsModal({ children }: { children: ReactElement }) {
                   console.log(row);
                 });
                 notifications.show({
-                  title: "Saved",
-                  message: "Your OpenAI Version has been saved.",
+                  title: t("settingsModal.notifications.apiVersionSaved.title"),
+                  message: t("settingsModal.notifications.apiVersionSaved.message"),
                 });
               } catch (error: any) {
                 if (error.toJSON().message === "Network Error") {
                   notifications.show({
-                    title: "Error",
+                    title: t("misc.notifications.neworkError.title"),
                     color: "red",
-                    message: "No internet connection.",
+                    message: t("misc.notifications.neworkError.message"),
                   });
                 }
                 const message = error.response?.data?.error?.message;
                 if (message) {
                   notifications.show({
-                    title: "Error",
+                    title: t("misc.notifications.error.title"),
                     color: "red",
                     message,
                   });
@@ -341,20 +347,20 @@ export function SettingsModal({ children }: { children: ReactElement }) {
                 formNoValidate
               />
               <Button type="submit" loading={submitting}>
-                Save
+              {t("misc.saveButton")}
               </Button>
             </Flex>
             <Select
               mt="md"
-              label="Theme"
+              label={t("settingsModal.themeLabel")}
               value={theme}
               onChange={async (value: DefaultMantineColor) => {
                 setSubmitting(true);
                 setTheme(value.toLowerCase())
 
                 notifications.show({
-                  title: "Saved",
-                  message: "Theme has been saved.",
+                  title: t("settingsModal.notifications.themeSaved.title"),
+                  message: t("settingsModal.notifications.themeSaved.message"),
                 });
 
                 setSubmitting(false);
@@ -362,6 +368,26 @@ export function SettingsModal({ children }: { children: ReactElement }) {
               }}
               withinPortal
               data={config.availableThemes}
+            />
+            <Select
+              mt="md"
+              label={t("settingsModal.languageLabel")}
+              value={currentLanguage}
+              onChange={async (value: DefaultMantineColor) => {
+                setSubmitting(true);
+                setCurrentLanguage(value);
+                changeLanguage(value);
+
+                notifications.show({
+                  title: t("settingsModal.notifications.languageSaved.title"),
+                  message: t("settingsModal.notifications.languageSaved.message"),
+                });
+
+                setSubmitting(false);
+                
+              }}
+              withinPortal
+              data={availableLanguages}
             />
           </form>
         </Stack>

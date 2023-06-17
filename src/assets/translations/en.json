@@ -1,0 +1,220 @@
+{
+    "translation": {
+        "misc": {
+            "search": "Search",
+            "deleteButton": "Delete",
+            "saveButton": "Save",
+            "tokens": "tokens",
+            "newChatDescription": "New Chat",
+            "notifications": {
+                "neworkError": {
+                    "title": "Error",
+                    "message": "Network Error"
+                },
+                "error": {
+                    "title": "Error"
+                }
+            }
+        },
+        "indexRoute": {
+            "badge": "GPT-4 Ready",
+            "descriptionText": "An enhanced version of the already amazing Chatpad!",
+            "enterKeyButton": "Enter OpenAI Key",
+            "changeKeyButton": "Change OpenAI Key",
+            "features": {
+                "1": {
+                    "title": "Free and open source",
+                    "description": "This app is provided for free and the source code is available on GitHub."
+                },
+                "2": {
+                    "title": "Privacy focused",
+                    "description": "No tracking, no cookies, no bullshit. All your data is stored locally."
+                },
+                "3": {
+                    "title": "Best experience",
+                    "description": "Crafted with love and care to provide the best experience possible."
+                }
+            }
+        },
+        "chatRoute": {
+            "systemMessages": {
+                "talkLike": "Talk like",
+                "replyIn": "Reply in",
+                "tone": "tone",
+                "style": "style"
+            },
+            "character": "Character",
+            "tone": "Tone",
+            "style": "Style",
+            "format": "Format",
+            "tldr": "tl;dr of the following text, max 4 words",
+            "stopButton": "Stop",
+            "regenerateButton": "Regenerate response",
+            "textAreaPlaceholder": "Your message here...",
+            "notifications": {
+                "chatIdError": {
+                    "title": "Error",
+                    "message": "ChatId is not defined. Please create a chat to get started."
+                },
+                "apiKeyError": {
+                    "title": "Error",
+                    "message": "OpenAI API Key is not defined. Please set your API Key."
+                }
+            }
+        },
+        "createPromptModal": {
+            "newButton": "New Prompt",
+            "title": "Create Prompt",
+            "label": "Title",
+            "placeholder": "Content",
+            "notifications": {
+                "success": {
+                    "title": "Saved",
+                    "message": "Prompt Created"
+                },
+                "neworkError": {
+                    "title": "Error",
+                    "message": "Network Error"
+                }
+            }
+        },
+        "databaseModal": {
+            "title": "Database",
+            "chats": "Chats",
+            "messages": "Messages",
+            "prompts": "Prompts",
+            "notifications": {
+                "export": {
+                    "title": "Exporting Data",
+                    "message": "Your data is being exported."
+                },
+                "import": {
+                    "title": "Importing data",
+                    "message": "Your data is being imported."
+                },
+                "importError": {
+                    "title": "Error",
+                    "message": "The file you selected is invalid."
+                }
+            },
+            "exportButton": "Export Data",
+            "importButton": "Import Data"
+        },
+        "deleteAllDataModal": {
+            "title": "Delete All Data",
+            "text": "Are you sure you want to delete your data?"
+        },
+        "deleteChatModal": {
+            "title": "Delete Chat",
+            "notifications": {
+                "deleted": {
+                    "title": "Deleted",
+                    "message": "Chat deleted."
+                }
+            },
+            "text": "Are you sure you want to delete this chat?"
+        },
+        "deleteMessageModal": {
+            "title": "Delete Message",
+            "notifications": {
+                "deleted": {
+                    "title": "Deleted",
+                    "message": "Message deleted."
+                }
+            },
+            "text":"Are you sure you want to delete this message?",
+            "tooltip": "Delete Message" 
+        },
+        "settingsModal": {
+            "title": "Settings",
+            "apiKeyLabel": "OpenAI API Key",
+            "apiKeyText1": "Get your OpenAI API key",
+            "apiKeyText2": "The API Key is stored locally on your browser and never sent anywhere else.",
+            "apiType": "OpenAI Type",
+            "apiModelLabel": "OpenAI Model (OpenAI Only)",
+            "themeLabel": "Theme",
+            "languageLabel": "Language",
+            "warningTitle": "Warning",
+            "warningMessage": "The displayed cost was not updated yet to reflect the costs for each model. Right now it will always show the cost for GPT-3.5 on OpenAI.",
+            "notifications": {
+                "apiKeySaved": {
+                    "title": "Saved",
+                    "message": "Your OpenAI Key has been saved."
+                },
+                "apiTypeSaved": {
+                    "title": "Saved",
+                    "message": "Your OpenAI Type has been saved."
+                },
+                "apiModelSaved": {
+                    "title": "Saved",
+                    "message": "Your OpenAI Model has been saved."
+                },
+                "apiBaseSaved": {
+                    "title": "Saved",
+                    "message": "Your OpenAI Base has been saved."
+                },
+                "apiVersionSaved": {
+                    "title": "Saved",
+                    "message": "Your OpenAI Version has been saved."
+                },
+                "themeSaved": {
+                    "title": "Saved",
+                    "message": "Theme has been set."
+                },
+                "languageSaved": {
+                    "title": "Saved",
+                    "message": "Language has been set."
+                }
+            }
+        },
+        "deletePromptModal": {
+            "title": "Delete Prompt",
+            "text": "Are you sure you want to delete this prompt?",
+            "label": "Delete Prompt",
+            "notifications": {
+                "deleted": {
+                    "title": "Deleted",
+                    "message": "Chat deleted."
+                },
+                "error": {
+                    "title": "Error",
+                    "message": "Can't remove chat. Please refresh the page and try again."
+                }
+            }
+        },
+        "deleteChatsModal": {
+            "deleteButton": "Delete Chats",
+            "title": "Delete Chats",
+            "text":"Are you sure you want to delete your chats?"
+        },
+        "editChatModal": {
+            "title": "Edit Prompt",
+            "label": "Name",
+            "notifications": {
+                "saved": {
+                    "title": "Saved",
+                    "message": ""
+                }
+            }
+        },
+        "editPromptModal": {
+            "title": "Edit Prompt",
+            "titleLabel": "Title",
+            "contentLabel": "Content",
+            "editPromptLabel": "Edit Prompt",
+            "notifications": {
+                "saved": {
+                    "title": "Saved",
+                    "message": "Prompt updated"
+                }
+            }
+        },
+        "chats": {
+            "edit": "Edit",
+            "delete": "Delete"
+        },
+        "prompts": {
+            "tooltipLabel": "New Chat From Prompt"
+        }
+    }
+}

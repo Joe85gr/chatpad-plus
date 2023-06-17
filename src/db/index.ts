@@ -33,6 +33,7 @@ export interface Settings {
   openAiApiAuth?: 'none' | 'bearer-token' | 'api-key';
   openAiApiBase?: string;
   openAiApiVersion?: string;
+  currentLanguage?: string;
 }
 
 export class Database extends Dexie {

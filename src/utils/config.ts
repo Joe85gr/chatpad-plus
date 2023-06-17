@@ -1,3 +1,4 @@
+import { SelectItem } from "@mantine/core";
 import { Dictionary } from "lodash";
 
 interface Config {
@@ -22,11 +23,6 @@ interface Config {
     showTwitterLink: boolean;
     showFeedbackLink: boolean;
     showFirstMessageDescription: boolean;
-}
-
-interface SelectItem {
-    value: string;
-    label: string;
 }
 
 export let config: Config;

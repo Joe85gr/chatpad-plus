@@ -28,9 +28,11 @@ import { ScrollIntoView } from "../components/ScrollIntoView";
 import { IconPlayerStopFilled, IconRefresh } from "@tabler/icons-react";
 import { ChatCompletionRequestMessage } from "openai";
 import { encode } from "gpt-token-utils";
-import { set } from "lodash";
+import "../i18";
+import { useTranslation } from "react-i18next";
 
 export function ChatRoute() {
+  const { t, i18n } = useTranslation()
   const chatId = useChatId();
   const apiKey = useLiveQuery(async () => {
     return (await db.settings.where({ id: "general" }).first())?.openAiApiKey;
@@ -71,9 +73,9 @@ export function ChatRoute() {
     }
 
     const systemMessages: string[] = [];
-    if (writingCharacter) systemMessages.push(`Talk Like ${writingCharacter}.`);
-    if (writingTone) systemMessages.push(`Reply in ${writingTone} tone.`);
-    if (writingStyle) systemMessages.push(`Reply in ${writingStyle} style.`);
+    if (writingCharacter) systemMessages.push(`${t("chatRoute.systemMessages.talkLike")} ${writingCharacter}.`);
+    if (writingTone) systemMessages.push(`${t("chatRoute.systemMessages.replyIn")} ${writingTone} ${t("chatRoute.systemMessages.tone")}.`);
+    if (writingStyle) systemMessages.push(`${t("chatRoute.systemMessages.tone")} ${writingStyle} ${t("chatRoute.systemMessages.style")}.`);
     if (writingFormat) systemMessages.push(writingFormat);
     if (systemMessages.length === 0)
       systemMessages.push(
@@ -92,18 +94,18 @@ export function ChatRoute() {
 
     if (!chatId) {
       notifications.show({
-        title: "Error",
+        title: t("chatRoute.notifications.chatIdError.title"),
         color: "red",
-        message: "chatId is not defined. Please create a chat to get started.",
+        message: t("chatRoute.notifications.chatIdError.message"),
       });
       return;
     }
 
     if (!apiKey) {
       notifications.show({
-        title: "Error",
+        title: t("chatRoute.notifications.apiKeyError.title"),
         color: "red",
-        message: "OpenAI API Key is not defined. Please set your API Key",
+        message: t("chatRoute.notifications.apiKeyError.message"),
       });
       return;
     }
@@ -160,7 +162,7 @@ export function ChatRoute() {
 
       setSubmitting(false);
 
-      if (chat?.description === "New Chat") {
+      if (chat?.description === t("misc.newChatDescription")) {
         const messages = await db.messages
           .where({ chatId })
           .sortBy("createdAt");
@@ -170,7 +172,7 @@ export function ChatRoute() {
         const createChatDescription = await createChatCompletion(apiKey, [
           {
             role: "user",
-            content: `tl;dr of the following text, max 4 words: "${firstMessageContent}"`
+            content: `${t("chatRoute.tldr")}: "${firstMessageContent}"`
           },
         ]);
         const chatDescription =
@@ -178,7 +180,7 @@ export function ChatRoute() {
 
         if (createChatDescription.data.usage) {
           await db.chats.where({ id: chatId }).modify((chat) => {
-            chat.description = chatDescription ?? "New Chat";
+            chat.description = chatDescription ?? t("misc.newChatDescription");
             if (chat.totalTokens) {
               chat.totalTokens +=
                 createChatDescription.data.usage!.total_tokens;
@@ -194,16 +196,16 @@ export function ChatRoute() {
       
       if (error.toJSON().message === "Network Error") {
         notifications.show({
-          title: "Error",
+          title: t("misc.notificatios.neworkError.title"),
           color: "red",
-          message: "No internet connection.",
+          message: t("misc.notificatios.neworkError.message"),
         });
       }
       const message = error.response?.data?.error?.message;
       if (message) {
         notifications.show({
-          title: "Error",
-          color: "red",
+          title: t("misc.notificatios.error.title"),
+          color: t("misc.notificatios.error.message"),
           message,
         });
       }
@@ -320,7 +322,7 @@ export function ChatRoute() {
                 value={writingCharacter}
                 onChange={setWritingCharacter}
                 data={config.writingCharacters}
-                placeholder="Character"
+                placeholder={t("chatRoute.character")}
                 variant="filled"
                 searchable
                 clearable
@@ -330,7 +332,7 @@ export function ChatRoute() {
                 value={writingTone}
                 onChange={setWritingTone}
                 data={config.writingTones}
-                placeholder="Tone"
+                placeholder={t("chatRoute.tone")}
                 variant="filled"
                 searchable
                 clearable
@@ -340,7 +342,7 @@ export function ChatRoute() {
                 value={writingStyle}
                 onChange={setWritingStyle}
                 data={config.writingStyles}
-                placeholder="Style"
+                placeholder={t("chatRoute.style")}
                 variant="filled"
                 searchable
                 clearable
@@ -350,7 +352,7 @@ export function ChatRoute() {
                 value={writingFormat}
                 onChange={setWritingFormat}
                 data={config.writingFormats}
-                placeholder="Format"
+                placeholder={t("chatRoute.format")}
                 variant="filled"
                 searchable
                 clearable
@@ -365,12 +367,12 @@ export function ChatRoute() {
                 align="center">
                 {streaming && 
                 <Button onClick={stop} leftIcon={<IconPlayerStopFilled size={20} />}>
-                  Stop
+                  {t("chatRoute.stopButton")}
                 </Button>
                 }
                 {!streaming && messages?.length !== 0 &&
                 <Button onClick={regenerateResponse} leftIcon={<IconRefresh size={20} />}>
-                  Regenerate response 
+                  {t("chatRoute.regenerateButton")} 
                 </Button>
                 }
             </Flex>
@@ -378,7 +380,7 @@ export function ChatRoute() {
               <Textarea
                 key={chatId}
                 sx={{ flex: 1 }}
-                placeholder="Your message here..."
+                placeholder={t("chatRoute.textAreaPlaceholder")}
                 autosize
                 autoFocus
                 disabled={submitting}
