@@ -9,6 +9,7 @@ Based on the amazing [Chatpad](https://github.com/deiucanta/chatpad), Chatpad-Pl
 - 'Regenerate response' button for generating a different response for the last reply
 - Added delete last message button
 - Themes support
+- Languages support
 - Added install.sh file for easier local install
 - New 'Real Bro' mode, for the lulz :D
 
