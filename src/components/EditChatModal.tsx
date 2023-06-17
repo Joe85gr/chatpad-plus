@@ -3,6 +3,8 @@ import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { cloneElement, ReactElement, useEffect, useState } from "react";
 import { Chat, db } from "../db";
+import "../i18";
+import { useTranslation } from "react-i18next";
 
 export function EditChatModal({
   chat,
@@ -11,6 +13,7 @@ export function EditChatModal({
   chat: Chat;
   children: ReactElement;
 }) {
+  const { t, i18n } = useTranslation();
   const [opened, { open, close }] = useDisclosure(false);
   const [submitting, setSubmitting] = useState(false);
 
@@ -22,7 +25,7 @@ export function EditChatModal({
   return (
     <>
       {cloneElement(children, { onClick: open })}
-      <Modal opened={opened} onClose={close} title="Edit Chat" withinPortal>
+      <Modal opened={opened} onClose={close} title={ t("editChatModal.title")} withinPortal>
         <form
           onSubmit={async (event) => {
             try {
@@ -32,22 +35,22 @@ export function EditChatModal({
                 chat.description = value;
               });
               notifications.show({
-                title: "Saved",
-                message: "",
+                title: t("editChatModal.notifications.saved.title"),
+                message:  t("editChatModal.notifications.saved.message"),
               });
               close();
             } catch (error: any) {
               if (error.toJSON().message === "Network Error") {
                 notifications.show({
-                  title: "Error",
+                  title: t("misc.notifications.neworkError.title"),
                   color: "red",
-                  message: "No internet connection.",
+                  message: t("misc.notifications.neworkError.message"),
                 });
               }
               const message = error.response?.data?.error?.message;
               if (message) {
                 notifications.show({
-                  title: "Error",
+                  title: t("misc.notifications.error.title"),
                   color: "red",
                   message,
                 });
@@ -59,14 +62,14 @@ export function EditChatModal({
         >
           <Stack>
             <TextInput
-              label="Name"
+              label={t("editChatModal.label")}
               value={value}
               onChange={(event) => setValue(event.currentTarget.value)}
               formNoValidate
               data-autofocus
             />
             <Button type="submit" loading={submitting}>
-              Save
+              {t("misc.saveButton")}
             </Button>
           </Stack>
         </form>

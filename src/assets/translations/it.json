@@ -12,6 +12,26 @@
                 }
             }
         },
+        "indexRoute": {
+            "badge": "GPT-4 Ready",
+            "descriptionText": "An enhanced version of the already amazing Chatpad!",
+            "enterKeyButton": "Enter OpenAI Key",
+            "changeKeyButton": "Change OpenAI Key",
+            "features": {
+                "1": {
+                    "title": "Free and open source",
+                    "description": "This app is provided for free and the source code is available on GitHub."
+                },
+                "2": {
+                    "title": "Privacy focused",
+                    "description": "No tracking, no cookies, no bullshit. All your data is stored locally."
+                },
+                "3": {
+                    "title": "Best experience",
+                    "description": "Crafted with love and care to provide the best experience possible."
+                }
+            }
+        },
         "createPromptModal": {
             "newButton": "New Prompt",
             "saveButton": "Save",

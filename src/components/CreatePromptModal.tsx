@@ -97,7 +97,7 @@ export function CreatePromptModal({ content }: { content?: string }) {
               onChange={(event) => setValue(event.currentTarget.value)}
             />
             <Button type="submit" loading={submitting}>
-            {t("createPromptModal.saveButton")}
+            {t("misc.saveButton")}
             </Button>
           </Stack>
         </form>
